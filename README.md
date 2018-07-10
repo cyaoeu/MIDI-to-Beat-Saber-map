@@ -8,3 +8,9 @@ Input: .mid file (hardcoded as beatsaber.mid for now)
 Output: .json file (hardcoded as data.json for now)
 
 Change the path variable to the location of your .mid file.
+
+TODO:
+- Obstacles.
+- Favorite mode, specified notes for certain note type/line/layer/cut direction combinations (with optional cut direction override using MIDI channel).
+- Split script into more reasonable parts, for example separate preview sample generation scripts.
+- Add GUI that calls map generation script and remove hard coded paths.
