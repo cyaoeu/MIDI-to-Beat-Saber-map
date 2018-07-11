@@ -108,6 +108,66 @@ obstacle_types = [
     ("obstacle_wall", 0),
     ("obstacle_ceiling", 1)
 ]
+obstacle_durations = [
+    ("duration_duration0", 0),
+    ("duration_duration0.5", 0.5),
+    ("duration_duration1", 1),
+    ("duration_duration2", 2),
+    ("duration_duration3", 3),
+    ("duration_duration4", 4),
+    ("duration_duration5", 5),
+    ("duration_duration6", 6),
+    ("duration_duration7", 7),
+    ("duration_duration8", 8),
+    ("duration_duration9", 9),
+    ("duration_duration10", 10),
+    ("duration_duration11", 11),
+    ("duration_duration12", 12),
+    ("duration_duration13", 13),
+    ("duration_duration14", 14),
+    ("duration_duration15", 15),
+    ("duration_duration16", 16)
+]
+
+obstacle_widths = [
+    ("width_width0", 0),
+    ("width_width1", 1),
+    ("width_width2", 2),
+    ("width_width3", 3),
+    ("width_width4", 4),
+    ("width_width5", 5),
+    ("width_width6", 6),
+    ("width_width7", 7),
+    ("width_width8", 8),
+    ("width_width9", 9)
+]
+
+#lighting
+lighting_types = [
+    ("light_light0", 0),
+    ("light_light1", 1),
+    ("light_light2", 2),
+    ("light_light3", 3),
+    ("light_light4", 4),
+    ("turn_turnmiddle", 8),
+    ("zoom_zoomin", 9),
+    ("move_movelight1", 12),
+    ("move_movelight2", 13)
+] 
+
+lighting_values = [
+    ("off_off", 0),
+    ("blue_blue0", 1),
+    ("blue_blue1", 2),
+    ("blue_fade", 3),
+    ("unknown_unknown", 4),
+    ("red_red0", 5),
+    ("red_red1", 6),
+    ("red_fade", 7),
+    ("unknown_unknown", 8),
+    ("unknown_unknown", 9),
+    ("unknown_unknown", 10)
+]
 
 #JSON (credits to ciwolsey)
 map = {
@@ -137,7 +197,6 @@ obstacle = { #todo
     "_duration": 0,
     "_width": 0
 }
-
 
 
 #settings for preview_sample.py

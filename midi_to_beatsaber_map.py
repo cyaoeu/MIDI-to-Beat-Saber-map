@@ -1,4 +1,5 @@
 import os
+import sys
 import itertools
 import mido
 import json
@@ -98,7 +99,10 @@ class Beatsaber_Python:
         #print(outputnote)
         return(outputobstacle)
 
+
+
 instance = Beatsaber_Python()
 #instance.RenameReaperOutput()
 #preview_sample.CreateReaperNotenamesFile() # uncomment the start of this line to generate a notenames file for Reaper
+#preview_sample.ParseJSON() # uncommen the start of this line to analyze .json files getting most common notes/obstacles/lighting (int, --n or --o or --l)
 instance.MidiReader()
