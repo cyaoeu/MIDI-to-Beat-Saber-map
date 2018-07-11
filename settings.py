@@ -26,9 +26,9 @@ input_tuple = [ #configure notes here
     ("note_red-line_middleleft-layer_middle", 93),
     ("note_red-line_middleleft-layer_top", 94),
 
-    ("note_red-line_middleleft-layer_bottom", 96),
-    ("note_red-line_middleleft-layer_middle", 97),
-    ("note_red-line_middleleft-layer_top", 98),
+    ("note_red-line_left-layer_bottom", 96),
+    ("note_red-line_left-layer_middle", 97),
+    ("note_red-line_left-layer_top", 98),
 
     #Blue saber: default C4 (60) to D5 (74)
     ("note_blue-line_right-layer_bottom", 60),
@@ -43,9 +43,9 @@ input_tuple = [ #configure notes here
     ("note_blue-line_middleleft-layer_middle", 69),
     ("note_blue-line_middleleft-layer_top", 70),
 
-    ("note_blue-line_middleleft-layer_bottom", 72),
-    ("note_blue-line_middleleft-layer_middle", 73),
-    ("note_blue-line_middleleft-layer_top", 74),
+    ("note_blue-line_left-layer_bottom", 72),
+    ("note_blue-line_left-layer_middle", 73),
+    ("note_blue-line_left-layer_top", 74),
 
     #Mines: default C2 (36) to D3 (50)
     ("note_mine-line_right-layer_bottom", 36),
@@ -60,9 +60,9 @@ input_tuple = [ #configure notes here
     ("note_mine-line_middleleft-layer_middle", 45),
     ("note_mine-line_middleleft-layer_top", 46),
 
-    ("note_mine-line_middleleft-layer_bottom", 48),
-    ("note_mine-line_middleleft-layer_middle", 49),
-    ("note_mine-line_middleleft-layer_top", 50)
+    ("note_mine-line_left-layer_bottom", 48),
+    ("note_mine-line_left-layer_middle", 49),
+    ("note_mine-line_left-layer_top", 50)
 ]
 
 cut_directions =  [
