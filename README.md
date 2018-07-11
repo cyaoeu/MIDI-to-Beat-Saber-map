@@ -10,6 +10,5 @@ Output: .json file (hardcoded as data.json for now)
 Change the path variable to the location of your .mid file.
 
 TODO:
-- Obstacles.
 - Favorite mode, specified notes for certain note type/line/layer/cut direction combinations (with optional cut direction override using MIDI channel).
 - Add GUI that calls map generation script and remove hard coded paths.
