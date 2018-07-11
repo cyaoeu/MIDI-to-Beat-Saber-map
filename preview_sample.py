@@ -77,7 +77,7 @@ def CreateReaperNotenamesFile():
             list3 = thing[0].split("-")[2]
             print(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize())
             keylist.append(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize())
-    with open("reaper_keys.txt", "w") as file:
+    with open(settings.path + "reaper_keys.txt", "w") as file:
         file.write("//MIDI to Beat Saber map Reaper keys\n")
         for line in keylist:
             file.write(line + "\n")
