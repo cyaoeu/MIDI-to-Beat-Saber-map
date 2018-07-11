@@ -100,4 +100,5 @@ class Beatsaber_Python:
 
 instance = Beatsaber_Python()
 #instance.RenameReaperOutput()
-instance.MidiReader()
+#instance.MidiReader()
+preview_sample.CreateReaperNotenamesFile()

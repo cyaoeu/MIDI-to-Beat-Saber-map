@@ -9,7 +9,7 @@ obstacle_tuple = [
     ("obstacle_wall-obstacleline_middleright", 102),
     ("obstacle_wall-obstacleline_middleleft", 103),
     ("obstacle_wall-obstacleline_left", 104),
-    ("obstacle_ceiling-none", 105)
+    ("obstacle_ceiling-none_top", 105)
 ]
 
 input_tuple = [ #configure notes here
