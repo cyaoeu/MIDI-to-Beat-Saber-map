@@ -92,7 +92,7 @@ class Beatsaber_Python:
         outputobstacle["_time"] = str(time)
         outputobstacle["_lineIndex"] = str(obstaclelineindex[0])
         outputobstacle["_type"] = str(obstacletype[0])
-        outputobstacle["_duration"] = duration #default to 1 for now
+        outputobstacle["_duration"] = duration
         outputobstacle["_width"] = 1 #default to 1 for now
         #print(inputnote)
         #print(outputnote)
