@@ -32,14 +32,23 @@ class Beatsaber_Python:
                     currentbeat = currenttick / ticks_per_beat
                     note = msg.note
                     channel = msg.channel
-                    #if note
-                    midinote = [item[0] for item in settings.input_tuple if msg.note == item[1]]
-                    midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
-                    toJSONnote = midinote[0] + "-" + midichannel[0]
-                    toJSONtime = currentbeat
-                    #print("#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
-                    #print("#" + str(note) + " ch:" + str(channel))
-                    beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime))
+                    if note in range(101, 106): #if note is obstacle
+                        print("OBSTACLE")
+                        midinote = [item[0] for item in settings.obstacle_tuple if msg.note == item[1]]
+                        toJSONobstacle = midinote[0]
+                        toJSONtime = currentbeat
+                        print("#" + str(note) + " (" + midinote[0] + ")") #debug
+                        #print("#" + str(note) + " ch:" + str(channel))
+                        beatmap["_obstacles"].append(self.ObstacleToJSON(toJSONobstacle, toJSONtime))
+
+                    else:
+                        midinote = [item[0] for item in settings.input_tuple if msg.note == item[1]]
+                        midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
+                        toJSONnote = midinote[0] + "-" + midichannel[0]
+                        toJSONtime = currentbeat
+                        print("#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
+                        #print("#" + str(note) + " ch:" + str(channel))
+                        beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime))
         with open(settings.path + 'data.json', 'w') as outfile:
             json.dump(beatmap, outfile)
 
@@ -58,6 +67,23 @@ class Beatsaber_Python:
         #print(inputnote)
         #print(outputnote)
         return(outputnote)
+
+    def ObstacleToJSON(self, inputobstacle, time):
+        outputobstacle = copy.deepcopy(settings.obstacle)
+        inputobstacle = inputobstacle.split("-")
+        obstacletype = [item[1] for item in settings.obstacle_types if inputobstacle[0] == item[0]]
+        if obstacletype == "obstacle_wall":
+            obstaclelineindex = [item[1] for item in settings.obstacle_line_indices if inputobstacle[1] == item[0]]
+        else:
+            obstaclelineindex = "0"
+        outputobstacle["_time"] = str(time)
+        outputobstacle["_lineIndex"] = str(obstaclelineindex[0])
+        outputobstacle["_type"] = str(obstacletype[0])
+        outputobstacle["_duration"] = 1 #default to 1 for now
+        outputobstacle["_width"] = 1 #default to 1 for now
+        #print(inputnote)
+        #print(outputnote)
+        return(outputobstacle)
 
 instance = Beatsaber_Python()
 #instance.RenameReaperOutput()

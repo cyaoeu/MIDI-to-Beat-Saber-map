@@ -3,6 +3,15 @@
 path = "C:\\beatsaber\\"
 ext = ".wav"
 
+obstacle_tuple = [
+    #Obstacles: default F7 (101) to A7 (105)
+    ("obstacle_wall-obstacleline_right", 101),
+    ("obstacle_wall-obstacleline_middleright", 102),
+    ("obstacle_wall-obstacleline_middleleft", 103),
+    ("obstacle_wall-obstacleline_left", 104),
+    ("obstacle_ceiling-none", 105)
+]
+
 input_tuple = [ #configure notes here
     #Red saber: default C6 (84) to D7 (98)
     ("note_red-line_right-layer_bottom", 84),
@@ -87,6 +96,18 @@ line_layers = [
     ("layer_top", 2)
 ]
 
+#obstacles
+obstacle_line_indices = [  
+    ("obstacleline_left", 0),
+    ("obstacleline_middleleft", 1),
+    ("obstacleline_middleright", 2),
+    ("obstacleline_right", 3)
+]
+
+obstacle_types = [
+    ("obstacle_wall", 0),
+    ("obstacle_ceiling", 1)
+]
 
 #JSON (credits to ciwolsey)
 map = {
@@ -116,6 +137,8 @@ obstacle = { #todo
     "_duration": 0,
     "_width": 0
 }
+
+
 
 #settings for preview_sample.py
 
