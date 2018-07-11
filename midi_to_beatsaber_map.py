@@ -24,31 +24,44 @@ class Beatsaber_Python:
                         bpm = mido.tempo2bpm(msg.tempo)
                         beatmap["_beatsPerMinute"] = bpm
                         tempo = msg.tempo
-
-                if msg.type == "note_off":
-                    currenttick += msg.time
-                elif msg.type == "note_on":
+                
+                if msg.type == "note_on" and msg.velocity != 0:
                     currenttick += msg.time
                     currentbeat = currenttick / ticks_per_beat
                     note = msg.note
                     channel = msg.channel
                     if note in range(101, 106): #if note is obstacle
-                        print("OBSTACLE")
+                        savednote = note
+                        obstacle_ontime = currentbeat
                         midinote = [item[0] for item in settings.obstacle_tuple if msg.note == item[1]]
                         toJSONobstacle = midinote[0]
-                        toJSONtime = currentbeat
-                        print("#" + str(note) + " (" + midinote[0] + ")") #debug
+                        print("NOTEON: " + "#" + str(note) + " (" + midinote[0] + ")") #debug
                         #print("#" + str(note) + " ch:" + str(channel))
-                        beatmap["_obstacles"].append(self.ObstacleToJSON(toJSONobstacle, toJSONtime))
-
+                        
                     else:
                         midinote = [item[0] for item in settings.input_tuple if msg.note == item[1]]
                         midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
                         toJSONnote = midinote[0] + "-" + midichannel[0]
                         toJSONtime = currentbeat
-                        print("#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
+                        print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
                         #print("#" + str(note) + " ch:" + str(channel))
                         beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime))
+
+                elif msg.type == "note_off" or msg.type == "note_on" and msg.velocity == 0:
+                    currenttick += msg.time
+                    currentbeat = currenttick / ticks_per_beat
+                    note = msg.note
+                    if note in range(101, 106):
+                        obstacleduration = currentbeat - obstacle_ontime
+                        beatmap["_obstacles"].append(self.ObstacleToJSON(toJSONobstacle, obstacle_ontime, obstacleduration))
+                        midinote = [item[0] for item in settings.obstacle_tuple if msg.note == item[1]]
+                        print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
+                    else:
+                        midinote = [item[0] for item in settings.input_tuple if msg.note == item[1]]
+                        midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
+                        print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug                   
+
+
         with open(settings.path + 'data.json', 'w') as outfile:
             json.dump(beatmap, outfile)
 
@@ -68,7 +81,7 @@ class Beatsaber_Python:
         #print(outputnote)
         return(outputnote)
 
-    def ObstacleToJSON(self, inputobstacle, time):
+    def ObstacleToJSON(self, inputobstacle, time, duration):
         outputobstacle = copy.deepcopy(settings.obstacle)
         inputobstacle = inputobstacle.split("-")
         obstacletype = [item[1] for item in settings.obstacle_types if inputobstacle[0] == item[0]]
@@ -79,7 +92,7 @@ class Beatsaber_Python:
         outputobstacle["_time"] = str(time)
         outputobstacle["_lineIndex"] = str(obstaclelineindex[0])
         outputobstacle["_type"] = str(obstacletype[0])
-        outputobstacle["_duration"] = 1 #default to 1 for now
+        outputobstacle["_duration"] = duration #default to 1 for now
         outputobstacle["_width"] = 1 #default to 1 for now
         #print(inputnote)
         #print(outputnote)
