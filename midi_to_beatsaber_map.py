@@ -101,13 +101,19 @@ class Beatsaber_Python:
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                                 beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                             else:
-                                midichannel = [item[0] for item in settings.lighting_values if msg.channel == item[1]]
+                                if midinote[1] == 12 or midinote[1] == 13: 
+                                    midichannel = [item[0] for item in settings.lighting_rotationvalues if msg.channel == item[1]]
+                                else:
+                                    midichannel = [item[0] for item in settings.lighting_lightvalues if msg.channel == item[1]]
                                 toJSONevent = midinote[0] + "-" + midichannel[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
                                 beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                         else:                      
                             midinote = [item[0] for item in settings.lighting_tuple if msg.note == item[1]]
-                            midichannel = [item[0] for item in settings.lighting_values if msg.channel == item[1]]
+                            if midinote[1] == 12 or midinote[1] == 13: 
+                                midichannel = [item[0] for item in settings.lighting_rotationvalues if msg.channel == item[1]]
+                            else:
+                                midichannel = [item[0] for item in settings.lighting_lightvalues if msg.channel == item[1]]
                             toJSONevent = midinote[0] + "-" + midichannel[0]                        
                             print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
                             #print("#" + str(note) + " ch:" + str(channel))                 
@@ -118,17 +124,23 @@ class Beatsaber_Python:
                             currenttick += msg.time
                             currentbeat = currenttick / ticks_per_beat
                             note = msg.note
-                            midinote = [item[0] for item in settings.event_favorites if msg.note == item[1]]                            
+                            midinote = [item[0] for item in settings.event_favorites if msg.note == item[1]]
                             if msg.channel == 9:
                                 toJSONnote = midinote[0]
                                 print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                             else:
-                                midichannel = [item[0] for item in settings.lighting_values if msg.channel == item[1]]
+                                if midinote[1] == 12 or midinote[1] == 13: 
+                                    midichannel = [item[0] for item in settings.lighting_rotationvalues if msg.channel == item[1]]
+                                else:
+                                    midichannel = [item[0] for item in settings.lighting_lightvalues if msg.channel == item[1]]
                                 toJSONnote = midinote[0] + "-" + midichannel[0]
                                 print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
                         else:
                             midinote = [item[0] for item in settings.lighting_tuple if msg.note == item[1]]
-                            midichannel = [item[0] for item in settings.lighting_values if msg.channel == item[1]]
+                            if midinote[1] == 12 or midinote[1] == 13: 
+                                midichannel = [item[0] for item in settings.lighting_rotationvalues if msg.channel == item[1]]
+                            else:
+                                midichannel = [item[0] for item in settings.lighting_lightvalues if msg.channel == item[1]]
                             print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
 
             else:
@@ -179,7 +191,10 @@ class Beatsaber_Python:
         outputevent = copy.deepcopy(settings.event)
         inputevent = inputevent.split("-")
         eventtype = [item[1] for item in settings.lighting_types if inputevent[0] == item[0]]
-        eventvalue = [item[1] for item in settings.lighting_values if inputevent[1] == item[0]]
+        if eventtype[0] >= 12:
+            eventvalue = [item[1] for item in settings.lighting_rotationvalues if inputevent[1] == item[0]]
+        else:    
+            eventvalue = [item[1] for item in settings.lighting_lightvalues if inputevent[1] == item[0]]
         outputevent["_time"] = time
         outputevent["_type"] = eventtype[0]
         outputevent["_value"] = eventvalue[0]

@@ -36,8 +36,8 @@ event_favorites = [
     #config favorites here: default C7-A#7 (96-106) for blue and C8-A#8 (108-118) for red)
     ("laser_laserleft-red_redon", 108),
     ("laser_laserright-red_redon", 109),
-    ("speed_speedlaserleft-red_redon", 110),
-    ("speed_speedlaserright-red_redon", 111),
+    ("speed_speedlaserleft-speed_speed1", 110),
+    ("speed_speedlaserright-speed_speed1", 111),
     ("ring_ringrotation-off_off", 112),
     ("laser_laserbottomside-red_redon", 113),
     ("laser_laserbottomside-red_redflashfade", 114),
@@ -48,12 +48,12 @@ event_favorites = [
     
     ("laser_laserleft-blue_blueon", 96),
     ("laser_laserright-blue_blueon", 97),
-    ("speed_speedlaserleft-blue_blueon", 98),
-    ("speed_speedlaserright-blue_blueon", 99),
+    ("speed_speedlaserleft-speed_speed1", 98),
+    ("speed_speedlaserright-speed_speed1", 99),
     ("ring_smallringrotation-off_off", 100),
     ("laser_laserbottomside-blue_blueon", 101),
     ("laser_laserbottomside-blue_blueflashfade", 102),
-    ("laser_laserbacktop-blue_blueflashfade", 103),
+    ("laser_laserbacktop-blue_blueon", 103),
     ("laser_laserbacktop-blue_blueflashfade", 104),
     ("track_trackringneons-blue_blueon", 105),
     ("track_trackringneons-blue_blueflashfade", 106)
@@ -216,8 +216,8 @@ obstacle_widths = [
 
 #lighting (not sure names are correct)
 lighting_types = [
-    ("track_laserbacktop", 0),
-    ("trak_trackringneons", 1),
+    ("laser_laserbacktop", 0),
+    ("track_trackringneons", 1),
     ("laser_laserleft", 2),
     ("laser_laserright", 3),
     ("laser_laserbottomside", 4),
@@ -234,7 +234,7 @@ lighting_lightvalues = [
     ("blue_blueflashfade", 3),
     ("red_redon", 5),
     ("red_redflashstay", 6),
-    ("red_fadeflashfade", 7)
+    ("red_redflashfade", 7)
 ]
 
 lighting_rotationvalues = [
