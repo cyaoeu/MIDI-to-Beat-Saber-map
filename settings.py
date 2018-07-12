@@ -34,29 +34,29 @@ note_favorites = [
 
 event_favorites = [
     #config favorites here: default C7-A#7 (96-106) for blue and C8-A#8 (108-118) for red)
-    ("laser_laserleft-red_red1", 108),
-    ("laser_laserright-red_red1", 109),
-    ("speed_speedlaserleft-red_red1", 110),
-    ("speed_speedlaserright-red_red1", 111),
+    ("laser_laserleft-red_redon", 108),
+    ("laser_laserright-red_redon", 109),
+    ("speed_speedlaserleft-red_redon", 110),
+    ("speed_speedlaserright-red_redon", 111),
     ("ring_ringrotation-off_off", 112),
-    ("laser_laserbottomside-red_red1", 113),
-    ("laser_laserbottomside-red_fade", 114),
-    ("laser_laserbacktop-red_red1", 115),
-    ("laser_laserbacktop-red_fade", 116),
-    ("track_trackringneons-red_red1", 117),
-    ("track_trackringneons-red_fade", 118),
+    ("laser_laserbottomside-red_redon", 113),
+    ("laser_laserbottomside-red_redflashfade", 114),
+    ("laser_laserbacktop-red_redon", 115),
+    ("laser_laserbacktop-red_redflashfade", 116),
+    ("track_trackringneons-red_redon", 117),
+    ("track_trackringneons-red_flashfade", 118),
     
-    ("laser_laserleft-blue_blue1", 96),
-    ("laser_laserright-blue_blue1", 97),
-    ("speed_speedlaserleft-blue_blue1", 98),
-    ("speed_speedlaserright-blue_blue1", 99),
-    ("ring_ringzoom-off_off", 100),
-    ("laser_laserbottomside-blue_blue1", 101),
-    ("laser_laserbottomside-blue_fade", 102),
-    ("laser_laserbacktop-blue_blue1", 103),
-    ("laser_laserbacktop-blue_fade", 104),
-    ("track_trackringneons-blue_blue1", 105),
-    ("track_trackringneons-blue_fade", 106)
+    ("laser_laserleft-blue_blueon", 96),
+    ("laser_laserright-blue_blueon", 97),
+    ("speed_speedlaserleft-blue_blueon", 98),
+    ("speed_speedlaserright-blue_blueon", 99),
+    ("ring_smallringrotation-off_off", 100),
+    ("laser_laserbottomside-blue_blueon", 101),
+    ("laser_laserbottomside-blue_blueflashfade", 102),
+    ("laser_laserbacktop-blue_blueflashfade", 103),
+    ("laser_laserbacktop-blue_blueflashfade", 104),
+    ("track_trackringneons-blue_blueon", 105),
+    ("track_trackringneons-blue_blueflashfade", 106)
 ]
 
 
@@ -134,7 +134,7 @@ lighting_tuple = [ #configure events here
 
     ("laser_laserbottomside", 80),
     ("ring_ringrotation", 81),
-    ("ring_ringzoom", 82)
+    ("ring_smallringrotation", 82)
 ]
 
 cut_directions =  [
@@ -216,28 +216,37 @@ obstacle_widths = [
 
 #lighting (not sure names are correct)
 lighting_types = [
-    ("track_trackringneons", 0),
-    ("laser_laserbacktop", 1),
+    ("track_laserbacktop", 0),
+    ("trak_trackringneons", 1),
     ("laser_laserleft", 2),
     ("laser_laserright", 3),
     ("laser_laserbottomside", 4),
     ("ring_ringrotation", 8),
-    ("ring_ringzoom", 9),
+    ("ring_smallringrotation", 9),
     ("speed_speedlaserleft", 12),
     ("speed_speedlaserright", 13)
 ] 
 
-lighting_values = [
+lighting_lightvalues = [
     ("off_off", 0),
-    ("blue_blue0", 1),
-    ("blue_blue1", 2),
-    ("blue_fade", 3),
-    ("unknown_unknown", 4),
-    ("red_red0", 5),
-    ("red_red1", 6),
-    ("red_fade", 7),
-    ("unknown_unknown", 8),
-    ("unknown_unknown", 9)
+    ("blue_blueon", 1),
+    ("blue_blueflashstay", 2),
+    ("blue_blueflashfade", 3),
+    ("red_redon", 5),
+    ("red_redflashstay", 6),
+    ("red_fadeflashfade", 7)
+]
+
+lighting_rotationvalues = [
+    ("stop_stop", 0),
+    ("speed_speed1", 1),
+    ("speed_speed2", 2),
+    ("speed_speed3", 3),
+    ("speed_speed4", 4),
+    ("speed_speed5", 5),
+    ("speed_speed6", 6),
+    ("speed_speed7", 7),
+    ("speed_speed8", 8)
 ]
 
 #JSON (credits to ciwolsey for map+note)
