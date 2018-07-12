@@ -7,29 +7,29 @@ ext = ".wav"
 
 note_favorites = [
     #config favorites here: default C7-A#7 (96-106) for blue and C8-A#8 (108-118) for red)
-    ("note_red-line_middleleft-layer_bottom-cut_down", 108),
-    ("note_red-line_middleleft-layer_bottom-cut_up", 109),
-    ("note_red-line_left-layer_bottom-cut_down", 110),
-    ("note_red-line_left-layer_bottom-cut_up", 111),
-    ("note_red-line_left-layer_middle-cut_left", 112),
-    ("note_red-line_left-layer_bottom-cut_right", 113),
-    ("note_red-line_left-layer_bottom-cut_downleft", 114),
+    ("note_red-line_midleft-layer_bot-cut_down", 108),
+    ("note_red-line_midleft-layer_bot-cut_up", 109),
+    ("note_red-line_left-layer_bot-cut_down", 110),
+    ("note_red-line_left-layer_bot-cut_up", 111),
+    ("note_red-line_left-layer_mid-cut_left", 112),
+    ("note_red-line_left-layer_bot-cut_right", 113),
+    ("note_red-line_left-layer_bot-cut_downleft", 114),
     ("note_red-line_left-layer_top-cut_any", 115),
-    ("note_red-line_middleleft-layer_bottom-cut_down", 116),
-    ("note_red-line_middleleft-layer_bottom-cut_down", 117),
-    ("note_red-line_middleleft-layer_bottom-cut_down", 118),
+    ("note_red-line_midleft-layer_bot-cut_down", 116),
+    ("note_red-line_midleft-layer_bot-cut_down", 117),
+    ("note_red-line_midleft-layer_bot-cut_down", 118),
     
-    ("note_blue-line_middleright-layer_bottom-cut_down", 96),
-    ("note_blue-line_middleright-layer_bottom-cut_up", 97),
-    ("note_blue-line_right-layer_bottom-cut_down", 98),
-    ("note_blue-line_right-layer_bottom-cut_up", 99),
-    ("note_blue-line_right-layer_bottom-cut_left", 100),
-    ("note_blue-line_right-layer_middle-cut_right", 101),
-    ("note_blue-line_right-layer_bottom-cut_downright", 102),
+    ("note_blue-line_midright-layer_bot-cut_down", 96),
+    ("note_blue-line_midright-layer_bot-cut_up", 97),
+    ("note_blue-line_right-layer_bot-cut_down", 98),
+    ("note_blue-line_right-layer_bot-cut_up", 99),
+    ("note_blue-line_right-layer_bot-cut_left", 100),
+    ("note_blue-line_right-layer_mid-cut_right", 101),
+    ("note_blue-line_right-layer_bot-cut_downright", 102),
     ("note_blue-line_right-layer_top-cut_any", 103),
-    ("note_blue-line_middleright-layer_bottom-cut_down", 104),
-    ("note_blue-line_middleright-layer_bottom-cut_down", 105),
-    ("note_blue-line_middleright-layer_bottom-cut_down", 106)
+    ("note_blue-line_midright-layer_bot-cut_down", 104),
+    ("note_blue-line_midright-layer_bot-cut_down", 105),
+    ("note_blue-line_midright-layer_bot-cut_down", 106)
 ]
 
 event_favorites = [
@@ -39,8 +39,8 @@ event_favorites = [
     ("speed_speedlaserleft-speed_speed1", 110),
     ("speed_speedlaserright-speed_speed1", 111),
     ("ring_ringrotation-off_off", 112),
-    ("laser_laserbottomside-red_redon", 113),
-    ("laser_laserbottomside-red_redflashfade", 114),
+    ("laser_laserbotside-red_redon", 113),
+    ("laser_laserbotside-red_redflashfade", 114),
     ("laser_laserbacktop-red_redon", 115),
     ("laser_laserbacktop-red_redflashfade", 116),
     ("track_trackringneons-red_redon", 117),
@@ -51,8 +51,8 @@ event_favorites = [
     ("speed_speedlaserleft-speed_speed1", 98),
     ("speed_speedlaserright-speed_speed1", 99),
     ("ring_smallringrotation-off_off", 100),
-    ("laser_laserbottomside-blue_blueon", 101),
-    ("laser_laserbottomside-blue_blueflashfade", 102),
+    ("laser_laserbotside-blue_blueon", 101),
+    ("laser_laserbotside-blue_blueflashfade", 102),
     ("laser_laserbacktop-blue_blueon", 103),
     ("laser_laserbacktop-blue_blueflashfade", 104),
     ("track_trackringneons-blue_blueon", 105),
@@ -64,62 +64,62 @@ event_favorites = [
 obstacle_tuple = [
     #Obstacles: default F6 (89) to A6 (93)
     ("obstacle_wall-obstacleline_right", 89),
-    ("obstacle_wall-obstacleline_middleright", 90),
-    ("obstacle_wall-obstacleline_middleleft", 91),
+    ("obstacle_wall-obstacleline_midright", 90),
+    ("obstacle_wall-obstacleline_midleft", 91),
     ("obstacle_wall-obstacleline_left", 92),
     ("obstacle_ceiling-none_top", 93)
 ]
 
 input_tuple = [ #configure notes here
     #Red saber: default C5 (72) to D6 (86)
-    ("note_red-line_right-layer_bottom", 72),
-    ("note_red-line_right-layer_middle", 73),
+    ("note_red-line_right-layer_bot", 72),
+    ("note_red-line_right-layer_mid", 73),
     ("note_red-line_right-layer_top", 74),
 
-    ("note_red-line_middleright-layer_bottom", 76),
-    ("note_red-line_middleright-layer_middle", 77),
-    ("note_red-line_middleright-layer_top", 78),
+    ("note_red-line_midright-layer_bot", 76),
+    ("note_red-line_midright-layer_mid", 77),
+    ("note_red-line_midright-layer_top", 78),
 
-    ("note_red-line_middleleft-layer_bottom", 80),
-    ("note_red-line_middleleft-layer_middle", 81),
-    ("note_red-line_middleleft-layer_top", 82),
+    ("note_red-line_midleft-layer_bot", 80),
+    ("note_red-line_midleft-layer_mid", 81),
+    ("note_red-line_midleft-layer_top", 82),
 
-    ("note_red-line_left-layer_bottom", 84),
-    ("note_red-line_left-layer_middle", 85),
+    ("note_red-line_left-layer_bot", 84),
+    ("note_red-line_left-layer_mid", 85),
     ("note_red-line_left-layer_top", 86),
 
     #Blue saber: default C3 (48) to D4 (62)
-    ("note_blue-line_right-layer_bottom", 48),
-    ("note_blue-line_right-layer_middle", 49),
+    ("note_blue-line_right-layer_bot", 48),
+    ("note_blue-line_right-layer_mid", 49),
     ("note_blue-line_right-layer_top", 50),
 
-    ("note_blue-line_middleright-layer_bottom", 52),
-    ("note_blue-line_middleright-layer_middle", 53),
-    ("note_blue-line_middleright-layer_top", 54),
+    ("note_blue-line_midright-layer_bot", 52),
+    ("note_blue-line_midright-layer_mid", 53),
+    ("note_blue-line_midright-layer_top", 54),
 
-    ("note_blue-line_middleleft-layer_bottom", 56),
-    ("note_blue-line_middleleft-layer_middle", 57),
-    ("note_blue-line_middleleft-layer_top", 58),
+    ("note_blue-line_midleft-layer_bot", 56),
+    ("note_blue-line_midleft-layer_mid", 57),
+    ("note_blue-line_midleft-layer_top", 58),
 
-    ("note_blue-line_left-layer_bottom", 60),
-    ("note_blue-line_left-layer_middle", 61),
+    ("note_blue-line_left-layer_bot", 60),
+    ("note_blue-line_left-layer_mid", 61),
     ("note_blue-line_left-layer_top", 62),
 
     #Mines: default C1 (24) to D2 (38)
-    ("note_mine-line_right-layer_bottom", 24),
-    ("note_mine-line_right-layer_middle", 25),
+    ("note_mine-line_right-layer_bot", 24),
+    ("note_mine-line_right-layer_mid", 25),
     ("note_mine-line_right-layer_top", 26),
 
-    ("note_mine-line_middleright-layer_bottom", 28),
-    ("note_mine-line_middleright-layer_middle", 29),
-    ("note_mine-line_middleright-layer_top", 30),
+    ("note_mine-line_midright-layer_bot", 28),
+    ("note_mine-line_midright-layer_mid", 29),
+    ("note_mine-line_midright-layer_top", 30),
 
-    ("note_mine-line_middleleft-layer_bottom", 32),
-    ("note_mine-line_middleleft-layer_middle", 33),
-    ("note_mine-line_middleleft-layer_top", 34),
+    ("note_mine-line_midleft-layer_bot", 32),
+    ("note_mine-line_midleft-layer_mid", 33),
+    ("note_mine-line_midleft-layer_top", 34),
 
-    ("note_mine-line_left-layer_bottom", 36),
-    ("note_mine-line_left-layer_middle", 37),
+    ("note_mine-line_left-layer_bot", 36),
+    ("note_mine-line_left-layer_mid", 37),
     ("note_mine-line_left-layer_top", 38)
 ]
 
@@ -132,7 +132,7 @@ lighting_tuple = [ #configure events here
     ("speed_speedlaserleft", 77),
     ("laser_laserbacktop", 78),
 
-    ("laser_laserbottomside", 80),
+    ("laser_laserbotside", 80),
     ("ring_ringrotation", 81),
     ("ring_smallringrotation", 82)
 ]
@@ -157,22 +157,22 @@ note_types = [
 
 line_indices = [
     ("line_left", 0),
-    ("line_middleleft", 1),
-    ("line_middleright", 2),
+    ("line_midleft", 1),
+    ("line_midright", 2),
     ("line_right", 3)
 ]
 
 line_layers = [
-    ("layer_bottom", 0),
-    ("layer_middle", 1),
+    ("layer_bot", 0),
+    ("layer_mid", 1),
     ("layer_top", 2)
 ]
 
 #obstacles
 obstacle_line_indices = [  
     ("obstacleline_left", 0),
-    ("obstacleline_middleleft", 1),
-    ("obstacleline_middleright", 2),
+    ("obstacleline_midleft", 1),
+    ("obstacleline_midright", 2),
     ("obstacleline_right", 3)
 ]
 
@@ -220,7 +220,7 @@ lighting_types = [
     ("track_trackringneons", 1),
     ("laser_laserleft", 2),
     ("laser_laserright", 3),
-    ("laser_laserbottomside", 4),
+    ("laser_laserbotside", 4),
     ("ring_ringrotation", 8),
     ("ring_smallringrotation", 9),
     ("speed_speedlaserleft", 12),
@@ -287,9 +287,9 @@ event = {
 #settings for preview_sample.py
 
 notes = ["note_red", "note_blue", "note_mine"]
-lines = ["line_right", "line_middleright", "line_middleleft", "line_left"]
-layers = ["layer_bottom", "layer_middle", "layer_top"]
+lines = ["line_right", "line_midright", "line_midleft", "line_left"]
+layers = ["layer_bot", "layer_mid", "layer_top"]
 cuts = ["cut_up", "cut_down", "cut_left", "cut_right", "cut_upleft", "cut_upright", "cut_downleft", "cut_downright", "cut_any"] 
 
 obstacles = ["obstacle_wall", "obstacle_ceiling"]
-obstaclelines = ["obstacleline_right", "obstacleline_middleright", "obstacleline_middleleft", "obstacleline_left"]
+obstaclelines = ["obstacleline_right", "obstacleline_midright", "obstacleline_midleft", "obstacleline_left"]

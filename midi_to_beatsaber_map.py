@@ -32,7 +32,6 @@ class Beatsaber_Python:
                         note = msg.note
                         channel = msg.channel
                         if note in range(89, 93): #if note is obstacle
-                            savednote = note
                             obstacle_ontime = currentbeat
                             midinote = [item[0] for item in settings.obstacle_tuple if msg.note == item[1]]
                             toJSONobstacle = midinote[0]
