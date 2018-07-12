@@ -8,7 +8,6 @@ import preview_sample
 import settings
 
 class Beatsaber_Python:
-
     def MidiReader(self):
         beatmap = copy.deepcopy(settings.map)
         currenttick = 0
@@ -16,55 +15,136 @@ class Beatsaber_Python:
         ticks_per_beat = mid.ticks_per_beat
         for i, track in enumerate(mid.tracks):
             print('Track {}: {}'.format(i, track.name))
-            for msg in track:
-                #print(msg)
-
-                if msg.is_meta:
-                    if msg.type == "set_tempo":
-                        print(msg)
-                        bpm = mido.tempo2bpm(msg.tempo)
-                        beatmap["_beatsPerMinute"] = bpm
-                        tempo = msg.tempo
-                
-                if msg.type == "note_on" and msg.velocity != 0:
-                    currenttick += msg.time
-                    currentbeat = currenttick / ticks_per_beat
-                    note = msg.note
-                    channel = msg.channel
-                    if note in range(101, 106): #if note is obstacle
-                        savednote = note
-                        obstacle_ontime = currentbeat
-                        midinote = [item[0] for item in settings.obstacle_tuple if msg.note == item[1]]
-                        toJSONobstacle = midinote[0]
-                        print("NOTEON: " + "#" + str(note) + " (" + midinote[0] + ")") #debug
-                        #print("#" + str(note) + " ch:" + str(channel))
+            if track.name == "Notes":
+                for msg in track:
+                    #print(msg)
+                    if msg.is_meta:
+                        if msg.type == "set_tempo":
+                            print(msg)
+                            print("set BPM")
+                            bpm = mido.tempo2bpm(msg.tempo)
+                            beatmap["_beatsPerMinute"] = bpm
+                            tempo = msg.tempo
+                    
+                    if msg.type == "note_on" and msg.velocity != 0:
+                        currenttick += msg.time
+                        currentbeat = currenttick / ticks_per_beat
+                        note = msg.note
+                        channel = msg.channel
+                        if note in range(89, 93): #if note is obstacle
+                            savednote = note
+                            obstacle_ontime = currentbeat
+                            midinote = [item[0] for item in settings.obstacle_tuple if msg.note == item[1]]
+                            toJSONobstacle = midinote[0]
+                            print("NOTEON: " + "#" + str(note) + " (" + midinote[0] + ")") #debug
+                            #print("#" + str(note) + " ch:" + str(channel))
                         
-                    else:
-                        midinote = [item[0] for item in settings.input_tuple if msg.note == item[1]]
-                        midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
-                        toJSONnote = midinote[0] + "-" + midichannel[0]
+                        elif note in range(96, 119):
+                            midinote = [item[0] for item in settings.note_favorites if msg.note == item[1]]
+                            if msg.channel == 9: #really channel 10 (there is no midi channel 0) TODO fix
+                                toJSONnote = midinote[0]
+                                print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
+                            else:
+                                midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
+                                toJSONnote = midinote[0] + "-" + midichannel[0]
+                                print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
+                            toJSONtime = currentbeat                          
+                            #print("#" + str(note) + " ch:" + str(channel))
+                            beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime))
+                            
+                        else:
+                            midinote = [item[0] for item in settings.input_tuple if msg.note == item[1]]
+                            midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
+                            toJSONnote = midinote[0] + "-" + midichannel[0]
+                            toJSONtime = currentbeat
+                            print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
+                            #print("#" + str(note) + " ch:" + str(channel))
+                            beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime))
+
+                    elif msg.type == "note_off" or msg.type == "note_on" and msg.velocity == 0:
+                        currenttick += msg.time
+                        currentbeat = currenttick / ticks_per_beat
+                        note = msg.note
+                        if note in range(89, 93):
+                            obstacleduration = currentbeat - obstacle_ontime
+                            beatmap["_obstacles"].append(self.ObstacleToJSON(toJSONobstacle, obstacle_ontime, obstacleduration))
+                            midinote = [item[0] for item in settings.obstacle_tuple if msg.note == item[1]]
+                            print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
+                        else:
+                            midinote = [item[0] for item in settings.input_tuple if msg.note == item[1]]
+                            midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
+                            print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug                   
+
+            elif track.name == "Events":
+                print("events here")
+                currenttick = 0
+                currentbeat = 0
+                for msg in track:
+                    #print(msg)
+                    if msg.is_meta:
+                        if msg.type == "set_tempo":
+                            print(msg)
+                            bpm = mido.tempo2bpm(msg.tempo)
+                            beatmap["_beatsPerMinute"] = bpm
+                            tempo = msg.tempo
+                    
+                    if msg.type == "note_on" and msg.velocity != 0:
+                        note = msg.note
+                        channel = msg.channel
+                        currenttick += msg.time
+                        currentbeat = currenttick / ticks_per_beat
                         toJSONtime = currentbeat
-                        print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
-                        #print("#" + str(note) + " ch:" + str(channel))
-                        beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime))
+                        if note in range(96, 119):
+                            midinote = [item[0] for item in settings.event_favorites if msg.note == item[1]]
+                            if msg.channel == 9:
+                                toJSONevent = midinote[0]
+                                print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
+                                beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
+                            else:
+                                midichannel = [item[0] for item in settings.lighting_values if msg.channel == item[1]]
+                                toJSONevent = midinote[0] + "-" + midichannel[0]
+                                print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
+                                beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
+                        else:                      
+                            midinote = [item[0] for item in settings.lighting_tuple if msg.note == item[1]]
+                            midichannel = [item[0] for item in settings.lighting_values if msg.channel == item[1]]
+                            toJSONevent = midinote[0] + "-" + midichannel[0]                        
+                            print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
+                            #print("#" + str(note) + " ch:" + str(channel))                 
+                            beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
+                      
+                    elif msg.type == "note_off" or msg.type == "note_on" and msg.velocity == 0:
+                        if note in range(96, 119):
+                            currenttick += msg.time
+                            currentbeat = currenttick / ticks_per_beat
+                            note = msg.note
+                            midinote = [item[0] for item in settings.event_favorites if msg.note == item[1]]                            
+                            if msg.channel == 9:
+                                toJSONnote = midinote[0]
+                                print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
+                            else:
+                                midichannel = [item[0] for item in settings.lighting_values if msg.channel == item[1]]
+                                toJSONnote = midinote[0] + "-" + midichannel[0]
+                                print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
+                        else:
+                            midinote = [item[0] for item in settings.lighting_tuple if msg.note == item[1]]
+                            midichannel = [item[0] for item in settings.lighting_values if msg.channel == item[1]]
+                            print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
 
-                elif msg.type == "note_off" or msg.type == "note_on" and msg.velocity == 0:
-                    currenttick += msg.time
-                    currentbeat = currenttick / ticks_per_beat
-                    note = msg.note
-                    if note in range(101, 106):
-                        obstacleduration = currentbeat - obstacle_ontime
-                        beatmap["_obstacles"].append(self.ObstacleToJSON(toJSONobstacle, obstacle_ontime, obstacleduration))
-                        midinote = [item[0] for item in settings.obstacle_tuple if msg.note == item[1]]
-                        print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
-                    else:
-                        midinote = [item[0] for item in settings.input_tuple if msg.note == item[1]]
-                        midichannel = [item[0] for item in settings.cut_directions if msg.channel == item[1]]
-                        print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug                   
+            else:
+                for msg in track:
+                    #print(msg)
+                    if msg.is_meta:
+                        if msg.type == "set_tempo":
+                            print(msg)
+                            print("set BPM")
+                            bpm = mido.tempo2bpm(msg.tempo)
+                            beatmap["_beatsPerMinute"] = bpm
+                            tempo = msg.tempo
 
-
-        with open(settings.path + 'data.json', 'w') as outfile:
-            json.dump(beatmap, outfile)
+        with open(settings.outputpath + settings.songname + "\\" + 'Expert.json', 'w') as outfile:
+            json.dump(beatmap, outfile, indent=4)
+            
 
     def NoteToJSON(self, inputnote, time):
         outputnote = copy.deepcopy(settings.note)
@@ -78,8 +158,6 @@ class Beatsaber_Python:
         outputnote["_lineLayer"] = str(linelayer[0])
         outputnote["_type"] = str(notetype[0])
         outputnote["_cutDirection"] = str(cutdirection[0])
-        #print(inputnote)
-        #print(outputnote)
         return(outputnote)
 
     def ObstacleToJSON(self, inputobstacle, time, duration):
@@ -95,14 +173,20 @@ class Beatsaber_Python:
         outputobstacle["_type"] = str(obstacletype[0])
         outputobstacle["_duration"] = duration
         outputobstacle["_width"] = 1 #default to 1 for now
-        #print(inputnote)
-        #print(outputnote)
         return(outputobstacle)
 
-
+    def EventToJSON(self, inputevent, time):
+        outputevent = copy.deepcopy(settings.event)
+        inputevent = inputevent.split("-")
+        eventtype = [item[1] for item in settings.lighting_types if inputevent[0] == item[0]]
+        eventvalue = [item[1] for item in settings.lighting_values if inputevent[1] == item[0]]
+        outputevent["_time"] = time
+        outputevent["_type"] = eventtype[0]
+        outputevent["_value"] = eventvalue[0]
+        return(outputevent)
 
 instance = Beatsaber_Python()
 #instance.RenameReaperOutput()
 #preview_sample.CreateReaperNotenamesFile() # uncomment the start of this line to generate a notenames file for Reaper
-#preview_sample.ParseJSON() # uncommen the start of this line to analyze .json files getting most common notes/obstacles/lighting (int, --n or --o or --l)
+#preview_sample.ParseJSON() # uncomment the start of this line to analyze .json files getting most common notes/obstacles/lighting (int, --n or --o or --l)
 instance.MidiReader()

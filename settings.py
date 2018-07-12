@@ -1,68 +1,140 @@
 #settings for midi_to_beatsaber_map.py
 
 path = "C:\\beatsaber\\"
+outputpath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\CustomSongs\\"
+songname = "Forbidden Fruit"
 ext = ".wav"
 
+note_favorites = [
+    #config favorites here: default C7-A#7 (96-106) for blue and C8-A#8 (108-118) for red)
+    ("note_red-line_middleleft-layer_bottom-cut_down", 108),
+    ("note_red-line_middleleft-layer_bottom-cut_up", 109),
+    ("note_red-line_left-layer_bottom-cut_down", 110),
+    ("note_red-line_left-layer_bottom-cut_up", 111),
+    ("note_red-line_left-layer_middle-cut_left", 112),
+    ("note_red-line_left-layer_bottom-cut_right", 113),
+    ("note_red-line_left-layer_bottom-cut_downleft", 114),
+    ("note_red-line_left-layer_top-cut_any", 115),
+    ("note_red-line_middleleft-layer_bottom-cut_down", 116),
+    ("note_red-line_middleleft-layer_bottom-cut_down", 117),
+    ("note_red-line_middleleft-layer_bottom-cut_down", 118),
+    
+    ("note_blue-line_middleright-layer_bottom-cut_down", 96),
+    ("note_blue-line_middleright-layer_bottom-cut_up", 97),
+    ("note_blue-line_right-layer_bottom-cut_down", 98),
+    ("note_blue-line_right-layer_bottom-cut_up", 99),
+    ("note_blue-line_right-layer_bottom-cut_left", 100),
+    ("note_blue-line_right-layer_middle-cut_right", 101),
+    ("note_blue-line_right-layer_bottom-cut_downright", 102),
+    ("note_blue-line_right-layer_top-cut_any", 103),
+    ("note_blue-line_middleright-layer_bottom-cut_down", 104),
+    ("note_blue-line_middleright-layer_bottom-cut_down", 105),
+    ("note_blue-line_middleright-layer_bottom-cut_down", 106)
+]
+
+event_favorites = [
+    #config favorites here: default C7-A#7 (96-106) for blue and C8-A#8 (108-118) for red)
+    ("laser_laserleft-red_red1", 108),
+    ("laser_laserright-red_red1", 109),
+    ("speed_speedlaserleft-red_red1", 110),
+    ("speed_speedlaserright-red_red1", 111),
+    ("ring_ringrotation-off_off", 112),
+    ("laser_laserbottomside-red_red1", 113),
+    ("laser_laserbottomside-red_fade", 114),
+    ("laser_laserbacktop-red_red1", 115),
+    ("laser_laserbacktop-red_fade", 116),
+    ("track_trackringneons-red_red1", 117),
+    ("track_trackringneons-red_fade", 118),
+    
+    ("laser_laserleft-blue_blue1", 96),
+    ("laser_laserright-blue_blue1", 97),
+    ("speed_speedlaserleft-blue_blue1", 98),
+    ("speed_speedlaserright-blue_blue1", 99),
+    ("ring_ringzoom-off_off", 100),
+    ("laser_laserbottomside-blue_blue1", 101),
+    ("laser_laserbottomside-blue_fade", 102),
+    ("laser_laserbacktop-blue_blue1", 103),
+    ("laser_laserbacktop-blue_fade", 104),
+    ("track_trackringneons-blue_blue1", 105),
+    ("track_trackringneons-blue_fade", 106)
+]
+
+
+
 obstacle_tuple = [
-    #Obstacles: default F7 (101) to A7 (105)
-    ("obstacle_wall-obstacleline_right", 101),
-    ("obstacle_wall-obstacleline_middleright", 102),
-    ("obstacle_wall-obstacleline_middleleft", 103),
-    ("obstacle_wall-obstacleline_left", 104),
-    ("obstacle_ceiling-none_top", 105)
+    #Obstacles: default F6 (89) to A6 (93)
+    ("obstacle_wall-obstacleline_right", 89),
+    ("obstacle_wall-obstacleline_middleright", 90),
+    ("obstacle_wall-obstacleline_middleleft", 91),
+    ("obstacle_wall-obstacleline_left", 92),
+    ("obstacle_ceiling-none_top", 93)
 ]
 
 input_tuple = [ #configure notes here
-    #Red saber: default C6 (84) to D7 (98)
-    ("note_red-line_right-layer_bottom", 84),
-    ("note_red-line_right-layer_middle", 85),
-    ("note_red-line_right-layer_top", 86),
+    #Red saber: default C5 (72) to D6 (86)
+    ("note_red-line_right-layer_bottom", 72),
+    ("note_red-line_right-layer_middle", 73),
+    ("note_red-line_right-layer_top", 74),
 
-    ("note_red-line_middleright-layer_bottom", 88),
-    ("note_red-line_middleright-layer_middle", 89),
-    ("note_red-line_middleright-layer_top", 90),
+    ("note_red-line_middleright-layer_bottom", 76),
+    ("note_red-line_middleright-layer_middle", 77),
+    ("note_red-line_middleright-layer_top", 78),
 
-    ("note_red-line_middleleft-layer_bottom", 92),
-    ("note_red-line_middleleft-layer_middle", 93),
-    ("note_red-line_middleleft-layer_top", 94),
+    ("note_red-line_middleleft-layer_bottom", 80),
+    ("note_red-line_middleleft-layer_middle", 81),
+    ("note_red-line_middleleft-layer_top", 82),
 
-    ("note_red-line_left-layer_bottom", 96),
-    ("note_red-line_left-layer_middle", 97),
-    ("note_red-line_left-layer_top", 98),
+    ("note_red-line_left-layer_bottom", 84),
+    ("note_red-line_left-layer_middle", 85),
+    ("note_red-line_left-layer_top", 86),
 
-    #Blue saber: default C4 (60) to D5 (74)
-    ("note_blue-line_right-layer_bottom", 60),
-    ("note_blue-line_right-layer_middle", 61),
-    ("note_blue-line_right-layer_top", 62),
+    #Blue saber: default C3 (48) to D4 (62)
+    ("note_blue-line_right-layer_bottom", 48),
+    ("note_blue-line_right-layer_middle", 49),
+    ("note_blue-line_right-layer_top", 50),
 
-    ("note_blue-line_middleright-layer_bottom", 64),
-    ("note_blue-line_middleright-layer_middle", 65),
-    ("note_blue-line_middleright-layer_top", 66),
+    ("note_blue-line_middleright-layer_bottom", 52),
+    ("note_blue-line_middleright-layer_middle", 53),
+    ("note_blue-line_middleright-layer_top", 54),
 
-    ("note_blue-line_middleleft-layer_bottom", 68),
-    ("note_blue-line_middleleft-layer_middle", 69),
-    ("note_blue-line_middleleft-layer_top", 70),
+    ("note_blue-line_middleleft-layer_bottom", 56),
+    ("note_blue-line_middleleft-layer_middle", 57),
+    ("note_blue-line_middleleft-layer_top", 58),
 
-    ("note_blue-line_left-layer_bottom", 72),
-    ("note_blue-line_left-layer_middle", 73),
-    ("note_blue-line_left-layer_top", 74),
+    ("note_blue-line_left-layer_bottom", 60),
+    ("note_blue-line_left-layer_middle", 61),
+    ("note_blue-line_left-layer_top", 62),
 
-    #Mines: default C2 (36) to D3 (50)
-    ("note_mine-line_right-layer_bottom", 36),
-    ("note_mine-line_right-layer_middle", 37),
-    ("note_mine-line_right-layer_top", 38),
+    #Mines: default C1 (24) to D2 (38)
+    ("note_mine-line_right-layer_bottom", 24),
+    ("note_mine-line_right-layer_middle", 25),
+    ("note_mine-line_right-layer_top", 26),
 
-    ("note_mine-line_middleright-layer_bottom", 40),
-    ("note_mine-line_middleright-layer_middle", 41),
-    ("note_mine-line_middleright-layer_top", 42),
+    ("note_mine-line_middleright-layer_bottom", 28),
+    ("note_mine-line_middleright-layer_middle", 29),
+    ("note_mine-line_middleright-layer_top", 30),
 
-    ("note_mine-line_middleleft-layer_bottom", 44),
-    ("note_mine-line_middleleft-layer_middle", 45),
-    ("note_mine-line_middleleft-layer_top", 46),
+    ("note_mine-line_middleleft-layer_bottom", 32),
+    ("note_mine-line_middleleft-layer_middle", 33),
+    ("note_mine-line_middleleft-layer_top", 34),
 
-    ("note_mine-line_left-layer_bottom", 48),
-    ("note_mine-line_left-layer_middle", 49),
-    ("note_mine-line_left-layer_top", 50)
+    ("note_mine-line_left-layer_bottom", 36),
+    ("note_mine-line_left-layer_middle", 37),
+    ("note_mine-line_left-layer_top", 38)
+]
+
+lighting_tuple = [ #configure events here
+    ("laser_laserright", 72),
+    ("speed_speedlaserright", 73),
+    ("track_trackringneons", 74),
+
+    ("laser_laserleft", 76),
+    ("speed_speedlaserleft", 77),
+    ("laser_laserbacktop", 78),
+
+    ("laser_laserbottomside", 80),
+    ("ring_ringrotation", 81),
+    ("ring_ringzoom", 82)
 ]
 
 cut_directions =  [
@@ -142,17 +214,17 @@ obstacle_widths = [
     ("width_width9", 9)
 ]
 
-#lighting
+#lighting (not sure names are correct)
 lighting_types = [
-    ("light_light0", 0),
-    ("light_light1", 1),
-    ("light_light2", 2),
-    ("light_light3", 3),
-    ("light_light4", 4),
-    ("turn_turnmiddle", 8),
-    ("zoom_zoomin", 9),
-    ("move_movelight1", 12),
-    ("move_movelight2", 13)
+    ("track_trackringneons", 0),
+    ("laser_laserbacktop", 1),
+    ("laser_laserleft", 2),
+    ("laser_laserright", 3),
+    ("laser_laserbottomside", 4),
+    ("ring_ringrotation", 8),
+    ("ring_ringzoom", 9),
+    ("speed_speedlaserleft", 12),
+    ("speed_speedlaserright", 13)
 ] 
 
 lighting_values = [
@@ -165,11 +237,10 @@ lighting_values = [
     ("red_red1", 6),
     ("red_fade", 7),
     ("unknown_unknown", 8),
-    ("unknown_unknown", 9),
-    ("unknown_unknown", 10)
+    ("unknown_unknown", 9)
 ]
 
-#JSON (credits to ciwolsey)
+#JSON (credits to ciwolsey for map+note)
 map = {
     "_version": "1.5.0",
     "_beatsPerMinute": 0,
@@ -190,7 +261,7 @@ note = {
     "_cutDirection": 8
 }
 
-obstacle = { #todo
+obstacle = {
     "_time": 0,
     "_lineIndex": 0,
     "_type": 0,
@@ -198,6 +269,11 @@ obstacle = { #todo
     "_width": 0
 }
 
+event = {
+    "_time": 0,
+    "_type": 0,
+    "_value": 0
+}
 
 #settings for preview_sample.py
 
