@@ -1,5 +1,4 @@
-# MIDI-to-Beat-Saber-map
-v 0.09 (pre-alpha)
+# MIDI-to-Beat-Saber-map (v0.09 (pre-alpha))
 Convert MIDI tracks to Beat Saber map data (JSON).
 
 Read the code for now, very WIP...
