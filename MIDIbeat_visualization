@@ -1,10 +1,10 @@
 desc:MIDIbeat visualization
-//author: Henrik Berglund (cyaoeu) - credits to Phillip Cartwright for MIDI sorting code
+//author: Henrik Berglund (cyaoeu) - credits to Phillip Cartwright for MIDI sorting code 
 
 filename:0,MIDIbeat_visualization_blue.png
 filename:1,MIDIbeat_visualization_red.png
 filename:2,MIDIbeat_visualization_arrow.png
-filename:3,MIDIbeat_visualization_ball.pngs
+filename:3,MIDIbeat_visualization_ball.png
 
 @init
 
@@ -353,18 +353,18 @@ while (midirecv(ts,msg1,msg2,msg3)) (
 );    
 
 @gfx
+gfx_loadimg(0, image1);
+gfx_loadimg(1, image2);
+gfx_loadimg(2, image3);
+gfx_loadimg(3, image4);
 wall1 == 1 ? gfx_muladdrect(0,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
 wall2 == 1 ? gfx_muladdrect(100,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
 wall3 == 1 ? gfx_muladdrect(200,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
 wall4 == 1 ? gfx_muladdrect(300,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
 wall5 == 1 ? gfx_muladdrect(0,10,380,80, 0, 0, 0, 0, .1, 0, 0, 0); 
 
-
 gfx_gradrect(0,250,400,500, 0,0,0,0, 0, 0, 0, 0, .8/250, .8/250, .8/250, 1/250, 0);
-gfx_loadimg(0, image1);
-gfx_loadimg(1, image2);
-gfx_loadimg(2, image3);
-gfx_loadimg(3, image4);
+
 y_o2 = 70;
 gfx_w = 400; gfx_h = 500;
 a = 0;
@@ -475,9 +475,9 @@ msg2 != 0 ? (
           red_notecut_direction == 8 ? gfx_blit(3, 1, 0);
         
        
-        loop(10,
-        gfx_muladdrect(x_o + blue_x_final, y_o2 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
-          ); 
+      loop(10,
+            gfx_muladdrect(x_o + blue_x_final, y_o2 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+              ); 
        
         loop(10,
         gfx_muladdrect(x_o + red_x_final, y_o2 + red_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
