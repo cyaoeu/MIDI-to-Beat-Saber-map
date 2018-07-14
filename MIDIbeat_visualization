@@ -1,0 +1,599 @@
+desc:MIDIbeat visualization
+//author: Henrik Berglund (cyaoeu) - credits to Phillip Cartwright for MIDI sorting code
+
+slider1:1<1,16,1>MIDI Bus
+slider2:1<1,16,1>Voice Number
+slider3:0<0,1,0{Highest,Lowest}>Priority
+slider4:0<0,2,3{Highest,Lowest,Next,None}>If note missing, play:
+
+
+filename:0,MIDIbeat_visualization_blue.png
+filename:1,MIDIbeat_visualization_red.png
+filename:2,MIDIbeat_visualization_arrow.png
+filename:3,MIDIbeat_visualization_ball.pngs
+
+@init
+
+ext_midi_bus = 1;
+tmp = -1;
+image1 = file_open(0);
+image2 = file_open(1);
+image3 = file_open(2);
+image4 = file_open(3);
+
+activeNotes = 1000;
+activeVel = 2000;
+activeCh = 3000;
+activeNotes[-1] = -1;
+activeVel[-1] = -1;
+countNotes = 0;
+
+function deg(deg)
+     (
+       degrees = deg * (3.1459/180);
+       degrees;
+);
+
+function SortNotes() local (i j)
+(
+    swap = 0;
+    i = 0;
+    while (i <= countNotes)(
+        activeNotes[i] < activeNotes[i+1] ? (
+            tmp = activeNotes[i];
+            activeNotes[i] = activeNotes[i+1];
+            activeNotes[i+1] = tmp;
+            tmp = activeVel[i];
+            activeVel[i] = activeVel[i+1];
+            activeVel[i+1] = tmp;
+            tmp = activeCh[i];
+            activeCh[i] = activeCh[i+1];
+            activeCh[i+1] = tmp;            i = 0;
+            swap = 1;
+        );
+        swap == 0 ? i += 1;
+        swap = 0;
+    );
+);
+
+function GetNote()
+(
+    hNote = activeNotes[0];
+    hVel = activeVel[0];
+    lNote = activeNotes[countNotes-1];
+    lVel = activeVel[countNotes-1];
+    priority == 0 ? aNote = activeNotes[voice] : aNote = activeNotes[countNotes - voice - 1];
+    priority == 0 ? aVel = activeVel[voice] : aVel = activeVel[countNotes - voice - 1];
+    priority == 0 ? aCh = activeCh[voice] : aCh = activeCh[countNotes - voice - 1];
+    priority == 0 ? nNote = activeNotes[voice + 1] : nNote = activeNotes[countNotes - voice - 2];
+    priority == 0 ? nVel = activeVel[voice + 1] : nVel = activeVel[countNotes - voice - 2];
+    priority == 0 ? nCh = activeCh[voice + 1] : nCh = activeCh[countNotes - voice - 2];
+    
+    aNote == -1 ? (
+        altPriority == 0 ? (
+          aNote = hNote;
+          aVel = hVel;
+          aCh = hCh;
+        ) : altPriority == 1 ? (
+          aNote = lNote;
+          aVel = lVel;
+          aCh = lCh;
+        ) : altPriority == 2 ? (
+          aNote = nNote;
+          aVel = nVel;
+          aCh = nCh;
+        ) : altPriority == 3 ? (
+          aNote = -1;
+          aVel = -1;
+          aCh = -1;
+        );
+    );
+);
+
+function AddNote(msg1, msg2, msg3) local (i j swap)
+(
+    i = 0;
+    j = 0;
+    while ((j == 0) && (i <= countNotes)) (
+        activeNotes[i] == -1 ? (
+            j = 1;
+            activeNotes[i] = msg2;
+            activeVel[i] = max(msg3,1);
+            activeCh[i] = msg1 & 0x0F;               
+        ): i += 1;
+    );
+);
+
+function RemoveNote(msg2) local (i j)
+(
+    i = 0;
+    loop(128,
+     activeNotes[i] == msg2 ? (
+      activeNotes[i] = -1;
+      activeVel[i] = -1;
+      activeCh[i] = -1;
+     );
+     i += 1;
+    );
+);
+
+i = 0;
+loop(128,
+    activeNotes[i] = -1;
+    activeVel[i] = -1;
+    activeCh[i] = -1;
+    i += 1;
+);
+
+@slider 
+
+bus = slider1 - 1;
+voice = slider2 - 1;
+priority = slider3;
+altPriority = slider4;
+
+noteOn = $x90;
+noteon_cnt = 0;
+size = 2;
+blue_n = 200;
+blue_n[0] = 96;
+blue_n[1] = 97;
+blue_n[2] = 98;
+blue_n[3] = 99;
+blue_n[4] = 100;
+blue_n[5] = 101;
+blue_n[6] = 102;
+blue_n[7] = 103;
+blue_n[8] = 104;
+blue_n[9] = 105;
+blue_n[10] = 106;
+
+blue_saber_start = 96;
+blue_saber_end = 106;
+
+blue_x_note = 1200;
+blue_x_note[0] = 200;
+blue_x_note[1] = 200;
+blue_x_note[2] = 300;
+blue_x_note[3] = 300;
+blue_x_note[4] = 0;
+blue_x_note[5] = 300;
+blue_x_note[6] = 300;
+blue_x_note[7] = 300;
+blue_x_note[8] = 200;
+blue_x_note[9] = 200;
+blue_x_note[10] = 200;
+blue_y_note[11] = 10000;
+
+blue_y_note = 1500;
+blue_y_note[0] = 200;
+blue_y_note[1] = 200;
+blue_y_note[2] = 200;
+blue_y_note[3] = 200;
+blue_y_note[4] = 200;
+blue_y_note[5] = 100;
+blue_y_note[6] = 200;
+blue_y_note[7] = 0;
+blue_y_note[8] = 200;
+blue_y_note[9] = 200;
+blue_y_note[10] = 200;
+blue_y_note[11] = 10000;
+
+blue_cut_direction = 1700;
+blue_cut_direction[0] = 1;
+blue_cut_direction[1] = 0;
+blue_cut_direction[2] = 1;
+blue_cut_direction[3] = 0;
+blue_cut_direction[4] = 3;
+blue_cut_direction[5] = 2;
+blue_cut_direction[6] = 7;
+blue_cut_direction[7] = 8;
+blue_cut_direction[8] = 1;
+blue_cut_direction[9] = 1;
+blue_cut_direction[10] = 1;
+
+red_n = 700;
+red_n[0] = 108;
+red_n[1] = 109;
+red_n[2] = 110;
+red_n[3] = 111;
+red_n[4] = 112;
+red_n[5] = 113;
+red_n[6] = 114;
+red_n[7] = 115;
+red_n[8] = 116;
+red_n[9] = 117;
+red_n[10] = 118;
+
+red_saber_start = 108;
+red_saber_end = 118;
+
+red_x_note = 2200;
+red_x_note[0] = 100;
+red_x_note[1] = 100;
+red_x_note[2] = 0;
+red_x_note[3] = 0;
+red_x_note[4] = 0;
+red_x_note[5] = 300;
+red_x_note[6] = 0;
+red_x_note[7] = 0;
+red_x_note[8] = 100;
+red_x_note[9] = 100;
+red_x_note[10] = 100;
+red_x_note[11] = 10000;
+
+red_y_note = 2500;
+red_y_note[0] = 200;
+red_y_note[1] = 200;
+red_y_note[2] = 200;
+red_y_note[3] = 200;
+red_y_note[4] = 100;
+red_y_note[5] = 200;
+red_y_note[6] = 200;
+red_y_note[7] = 0;
+red_y_note[8] = 200;
+red_y_note[9] = 200;
+red_y_note[10] = 200;
+red_y_note[11] = 10000;
+
+red_cut_direction = 2700;
+red_cut_direction[0] = 1;
+red_cut_direction[1] = 0;
+red_cut_direction[2] = 1;
+red_cut_direction[3] = 0;
+red_cut_direction[4] = 3;
+red_cut_direction[5] = 2;
+red_cut_direction[6] = 6;
+red_cut_direction[7] = 8;
+red_cut_direction[8] = 1;
+red_cut_direction[9] = 1;
+red_cut_direction[10] = 1;
+
+w = 75; h = 75;
+w2 = 75; h2 = 75;
+
+@slider
+something=slider1*srate;
+
+@block
+
+while (midirecv(ts,msg1,msg2,msg3)) (
+    midi_bus == bus ? (
+        midi_bus = bus;
+        // if note on
+        ((msg1 & 0xF0) == 0x90) && (msg3 > 0) ? (
+          _test = 1;
+          oNote = aNote;
+          oCh = aCh;
+          countNotes += 1;
+          AddNote(msg1, msg2, msg3);
+          SortNotes();
+          GetNote();
+          (aNote != oNote) ? (
+              _test = 3;
+              // send note on to new note
+              midisend(ts,0x90+aCh,aNote,aVel);
+              oNote != -1 ? (
+                // send note off to old note
+                midisend(ts,0x80+oCh,oNote,msg3);
+              );
+            );  
+
+        
+
+                   
+        // if note off  
+        ) : (((msg1 & 0xF0) == 0x90) && (msg3 == 0)) ||
+          ((msg1 & 0xF0) == 0x80) ? (
+          _test = 2;
+          //midisend(ts,msg1,msg2,msg3);
+          oNote = aNote;
+          oCh = aCh;
+          countNotes -= 1;
+          RemoveNote(msg2);
+          SortNotes();
+          GetNote();
+
+          (aNote != oNote)? (
+              _test = 4;
+
+            );      
+        ) : midisend(ts,msg1,msg2,msg3);
+    ) : midisend(ts,msg1,msg2,msg3);
+    
+    
+
+      
+    countNotes == 2 ? (
+    u = 0;
+    loop(11,
+      activenotes[1] == blue_n[u] ? (
+        blue_x_final = blue_x_note[u];
+        blue_y_final = blue_y_note[u];
+        blue_notecut_direction = blue_cut_direction[u];
+        gfx_r = 1; gfx_g = 1; gfx_b =1;
+        ) : u+= 1;
+      );
+    v = 0;  
+    loop(11,
+        activenotes[0] == red_n[v] ? (
+          red_x_final = red_x_note[v];
+         red_y_final = red_y_note[v];
+          red_notecut_direction = red_cut_direction[v];
+          gfx_r = 1; gfx_g = 1; gfx_b =1;
+          ) : v+= 1;
+        );
+        ):
+        countNotes == 1 ? (
+         
+
+    u2 = 0;
+    v2 = 0;  
+    loop(11,
+        activenotes[0] == blue_n[u2] ? (
+          blue_x_final = blue_x_note[u2];
+         blue_y_final = blue_y_note[u2];
+          blue_notecut_direction = blue_cut_direction[u2];
+          gfx_r = 1; gfx_g = 1; gfx_b =1;
+          ) : u2+= 1;
+          activenotes[0] == red_n[v2] ? (
+            red_x_final = red_x_note[v2];
+           red_y_final = red_y_note[v2];
+            red_notecut_direction = red_cut_direction[v2];
+            gfx_r = 1; gfx_g = 1; gfx_b =1;
+            ) : v2+= 1;
+        );
+        );
+                
+                 
+       
+      
+
+);    
+
+@gfx
+gfx_muladdrect(0,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
+gfx_gradrect(0,250,400,500, 0,0,0,0, 0, 0, 0, 0, .8/250, .8/250, .8/250, 1/250, 0);
+gfx_loadimg(0, image1);
+gfx_loadimg(1, image2);
+gfx_loadimg(2, image3);
+gfx_loadimg(3, image4);
+y_o2 = 70;
+gfx_w = 400; gfx_h = 500;
+a = 0;
+y = 50;
+x = 0;
+
+gfx_x = 200;
+gfx_y = 20;
+gfx_a = 1;
+
+msg2 != 0 ? (
+
+    
+      aCh == 9 ? (   
+      
+      countnotes == 1 ? (
+      aNote >= blue_saber_start && aNote <= blue_saber_end ? (
+      
+      gfx_x = x_o + blue_x_final;
+      gfx_y = y_o2 + blue_y_final;
+      gfx_blit(0, 1, 0);
+          
+      
+          blue_notecut_direction == 0 ? gfx_blit(2, 1, deg(180)) :
+          blue_notecut_direction == 1 ? gfx_blit(2, 1, 0) :
+          blue_notecut_direction == 2 ? gfx_blit(2, 1, deg(90)) :
+          blue_notecut_direction == 3 ? gfx_blit(2, 1, deg(270)) :
+          blue_notecut_direction == 4 ? gfx_blit(2, 1, deg(360-45)) :
+          blue_notecut_direction == 5 ? gfx_blit(2, 1, deg(45)) :
+          blue_notecut_direction == 6 ? gfx_blit(2, 1, deg(180+45)) :
+          blue_notecut_direction == 7 ? gfx_blit(2, 1, deg(180-45)) :
+          blue_notecut_direction == 8 ? gfx_blit(3, 1, 0);
+          
+          loop(10,
+          gfx_muladdrect(x_o + blue_x_final, y_o2 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+            ); 
+         
+        ) : (
+        aNote >= red_saber_start && aNote <=red_saber_end ? (
+        
+        gfx_x = x_o + red_x_final;
+        gfx_y = y_o2 + red_y_final;
+        
+          gfx_blit(1, 1, 0);
+          red_notecut_direction == 0 ? gfx_blit(2, 1, deg(180)) :
+          red_notecut_direction == 1 ? gfx_blit(2, 1, 0) :
+          red_notecut_direction == 2 ? gfx_blit(2, 1, deg(90)) :
+          red_notecut_direction == 3 ? gfx_blit(2, 1, deg(270)) :
+          red_notecut_direction == 4 ? gfx_blit(2, 1, deg(360-45)) :
+          red_notecut_direction == 5 ? gfx_blit(2, 1, deg(45)) :
+          red_notecut_direction == 6 ? gfx_blit(2, 1, deg(180+45)) :
+          red_notecut_direction == 7 ? gfx_blit(2, 1, deg(180-45)) :
+          red_notecut_direction == 8 ? gfx_blit(3, 1, 0);
+          
+  
+    loop(10,
+    gfx_muladdrect(x_o + red_x_final, y_o2 + red_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+      ); 
+          );
+        );
+        
+        
+        
+  
+        );
+      
+      countNotes == 2 ? (
+        gfx_x = x_o + blue_x_final;
+        gfx_y = y_o2 + blue_y_final; 
+        gfx_blit(0, 1, 0);
+        nCh != 9 ? (
+        
+        nCh == 0 ? gfx_blit(2, 1, deg(180)) :
+        nCh == 1 ? gfx_blit(2, 1, 0) :
+        nCh == 2 ? gfx_blit(2, 1, deg(90)) :
+        nCh == 3 ? gfx_blit(2, 1, deg(270)) :
+        nCh == 4 ? gfx_blit(2, 1, deg(360-45)) :
+        nCh == 5 ? gfx_blit(2, 1, deg(45)) :
+        nCh == 6 ? gfx_blit(2, 1, deg(180+45)) :
+        nCh == 7 ? gfx_blit(2, 1, deg(180-45)) :
+        nCh == 8 ? gfx_blit(3, 1, 0);
+        
+        ) : (
+  
+          blue_notecut_direction == 0 ? gfx_blit(2, 1, deg(180)) :
+          blue_notecut_direction == 1 ? gfx_blit(2, 1, 0) :
+          blue_notecut_direction == 2 ? gfx_blit(2, 1, deg(90)) :
+          blue_notecut_direction == 3 ? gfx_blit(2, 1, deg(270)) :
+          blue_notecut_direction == 4 ? gfx_blit(2, 1, deg(360-45)) :
+          blue_notecut_direction == 5 ? gfx_blit(2, 1, deg(45)) :
+          blue_notecut_direction == 6 ? gfx_blit(2, 1, deg(180+45)) :
+          blue_notecut_direction == 7 ? gfx_blit(2, 1, deg(180-45)) :
+          blue_notecut_direction == 8 ? gfx_blit(3, 1, 0);
+          );
+          gfx_x = x_o + red_x_final;
+          gfx_y = y_o2 + red_y_final;
+          
+          gfx_blit(1, 1, 0);
+          red_notecut_direction == 0 ? gfx_blit(2, 1, deg(180)) :
+          red_notecut_direction == 1 ? gfx_blit(2, 1, 0) :
+          red_notecut_direction == 2 ? gfx_blit(2, 1, deg(90)) :
+          red_notecut_direction == 3 ? gfx_blit(2, 1, deg(270)) :
+          red_notecut_direction == 4 ? gfx_blit(2, 1, deg(360-45)) :
+          red_notecut_direction == 5 ? gfx_blit(2, 1, deg(45)) :
+          red_notecut_direction == 6 ? gfx_blit(2, 1, deg(180+45)) :
+          red_notecut_direction == 7 ? gfx_blit(2, 1, deg(180-45)) :
+          red_notecut_direction == 8 ? gfx_blit(3, 1, 0);
+        
+          
+        loop(10,
+        gfx_muladdrect(x_o + blue_x_final, y_o2 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+          ); 
+        loop(10,
+        gfx_muladdrect(x_o + red_x_final, y_o2 + red_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+          ); 
+         
+            );
+           );
+           
+      aCh != 9 ? (   
+      
+      countnotes == 1 ? (
+      aNote >= blue_saber_start && aNote <= blue_saber_end ? (
+      
+      gfx_x = x_o + blue_x_final;
+      gfx_y = y_o2 + blue_y_final;
+      gfx_blit(0, 1, 0);
+      
+   
+      
+          aCh == 0 ? gfx_blit(2, 1, deg(180)) :
+          aCh == 1 ? gfx_blit(2, 1, 0) :
+          aCh == 2 ? gfx_blit(2, 1, deg(90)) :
+          aCh == 3 ? gfx_blit(2, 1, deg(270)) :
+          aCh == 4 ? gfx_blit(2, 1, deg(360-45)) :
+          aCh == 5 ? gfx_blit(2, 1, deg(45)) :
+          aCh == 6 ? gfx_blit(2, 1, deg(180+45)) :
+          aCh == 7 ? gfx_blit(2, 1, deg(180-45)) :
+          aCh == 8 ? gfx_blit(3, 1, 0);
+         
+          loop(10,
+          gfx_muladdrect(x_o + blue_x_final, y_o2 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+            ); 
+         
+        ) : (
+        aNote >= red_saber_start && aNote <=red_saber_end ? (
+        
+        gfx_x = x_o + red_x_final;
+        gfx_y = y_o2 + red_y_final;
+        
+          gfx_blit(1, 1, 0);
+          aCh == 0 ? gfx_blit(2, 1, deg(180)) :
+          aCh == 1 ? gfx_blit(2, 1, 0) :
+          aCh == 2 ? gfx_blit(2, 1, deg(90)) :
+          aCh == 3 ? gfx_blit(2, 1, deg(270)) :
+          aCh == 4 ? gfx_blit(2, 1, deg(360-45)) :
+          aCh == 5 ? gfx_blit(2, 1, deg(45)) :
+          aCh == 6 ? gfx_blit(2, 1, deg(180+45)) :
+          aCh == 7 ? gfx_blit(2, 1, deg(180-45)) :
+          aCh == 8 ? gfx_blit(3, 1, 0);
+          
+    
+    loop(10,
+    gfx_muladdrect(x_o + red_x_final, y_o2 + red_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+      ); 
+          );
+        );
+        
+        
+        
+    
+        );
+      
+      countNotes == 2 ? (
+        gfx_x = x_o + blue_x_final;
+        gfx_y = y_o2 + blue_y_final; 
+        gfx_blit(0, 1, 0);
+        
+        nCh == 9 ? (
+           
+           blue_notecut_direction == 0 ? gfx_blit(2, 1, deg(180)) :
+                     blue_notecut_direction == 1 ? gfx_blit(2, 1, 0) :
+                     blue_notecut_direction == 2 ? gfx_blit(2, 1, deg(90)) :
+                     blue_notecut_direction == 3 ? gfx_blit(2, 1, deg(270)) :
+                     blue_notecut_direction == 4 ? gfx_blit(2, 1, deg(360-45)) :
+                     blue_notecut_direction == 5 ? gfx_blit(2, 1, deg(45)) :
+                     blue_notecut_direction == 6 ? gfx_blit(2, 1, deg(180+45)) :
+                     blue_notecut_direction == 7 ? gfx_blit(2, 1, deg(180-45)) :
+                     blue_notecut_direction == 8 ? gfx_blit(3, 1, 0);
+                     ) : (
+    
+          nCh == 0 ? gfx_blit(2, 1, deg(180)) :
+          nCh == 1 ? gfx_blit(2, 1, 0) :
+          nCh == 2 ? gfx_blit(2, 1, deg(90)) :
+          nCh == 3 ? gfx_blit(2, 1, deg(270)) :
+          nCh == 4 ? gfx_blit(2, 1, deg(360-45)) :
+          nCh == 5 ? gfx_blit(2, 1, deg(45)) :
+          nCh == 6 ? gfx_blit(2, 1, deg(180+45)) :
+          nCh == 7 ? gfx_blit(2, 1, deg(180-45)) :
+          nCh == 8 ? gfx_blit(3, 1, 0);
+          );
+          
+          gfx_x = x_o + red_x_final;
+          gfx_y = y_o2 + red_y_final;
+          
+          gfx_blit(1, 1, 0);
+          aCh == 0 ? gfx_blit(2, 1, deg(180)) :
+          aCh == 1 ? gfx_blit(2, 1, 0) :
+          aCh == 2 ? gfx_blit(2, 1, deg(90)) :
+          aCh == 3 ? gfx_blit(2, 1, deg(270)) :
+          aCh == 4 ? gfx_blit(2, 1, deg(360-45)) :
+          aCh == 5 ? gfx_blit(2, 1, deg(45)) :
+          aCh == 6 ? gfx_blit(2, 1, deg(180+45)) :
+          aCh == 7 ? gfx_blit(2, 1, deg(180-45)) :
+          aCh  == 8 ? gfx_blit(3, 1, 0);
+        
+          
+        loop(10,
+        gfx_muladdrect(x_o + blue_x_final, y_o2 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+          ); 
+        loop(10,
+        gfx_muladdrect(x_o + red_x_final, y_o2 + red_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+          ); 
+         
+            );
+           );
+           
+    
+       
+        );
+
+
+
+
+
+@sample
+spl0=spl0;
+spl1=spl1;
+
