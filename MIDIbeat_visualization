@@ -1,37 +1,54 @@
 desc:MIDIbeat visualization
-//author: Henrik Berglund (cyaoeu) - credits to Phillip Cartwright for MIDI sorting code 
+//author: Henrik Berglund (cyaoeu) - credits to Olivier Belanger for MIDI code (CookDSP functions)
 
 filename:0,MIDIbeat_visualization_blue.png
 filename:1,MIDIbeat_visualization_red.png
-filename:2,MIDIbeat_visualization_arrow.png
-filename:3,MIDIbeat_visualization_ball.png
+filename:2,MIDIbeat_visualization_arrow_blue.png
+filename:3,MIDIbeat_visualization_ball_blue.png
+filename:4,MIDIbeat_visualization_arrow_red.png
+filename:5,MIDIbeat_visualization_ball_red.png
+filename:6,MIDIbeat_visualization_obstacle_wall.png
+filename:7,MIDIbeat_visualization_obstacle_ceiling.png
+filename:8,MIDIbeat_visualization_mine.png
 
 @init
 
 tmp = -1;
+
 image1 = file_open(0);
 image2 = file_open(1);
 image3 = file_open(2);
 image4 = file_open(3);
+image5 = file_open(4);
+image6 = file_open(5);
+image7 = file_open(6);
+image8 = file_open(7);
+image9 = file_open(8);
 
-activeNotes = 1000;
-activeVel = 2000;
-activeCh = 3000;
-activeNotes[-1] = -1;
-activeVel[-1] = -1;
-countNotes = 0; 
+note1 = 6700;
+note2 = 6750;
+note3 = 6800;
+note4 = 6850;
+note5 = 6900;
+note6 = 6950;
+note7 = 7000;
+note8 = 7050;
+note9 = 7100;
 
-function confirmpitch(note1, note2, note3, note4, start, end)
+
+function confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, start, end)
 (
-(note1 >= start && note1 <= end) ? returnpitch = note1 :
-(note2 >= start && note2 <= end) ? returnpitch = note2 :
-(note3 >= start && note3 <= end) ? returnpitch = note3 :
-(note4 >= start && note4 <= end) ? returnpitch = note4);
-
-function wallnoteoff(note)
-(
-  wall[note] = 0;
+(note1[0] >= start && note1[0] <= end) ? returnpitch = note1 :
+(note2[0] >= start && note2[0] <= end) ? returnpitch = note2 :
+(note3[0] >= start && note3[0] <= end) ? returnpitch = note3 :
+(note4[0] >= start && note4[0] <= end) ? returnpitch = note4 :
+(note5[0] >= start && note5[0] <= end) ? returnpitch = note5 :
+(note6[0] >= start && note6[0] <= end) ? returnpitch = note6 :
+(note7[0] >= start && note7[0] <= end) ? returnpitch = note7 :
+(note8[0] >= start && note8[0] <= end) ? returnpitch = note8 :
+(note9[0] >= start && note9[0] <= end) ? returnpitch = note9 
 );
+
 
 function memalloc(size)
 (
@@ -125,41 +142,45 @@ function poly_do(pitch velocity channel)
     );
 );
 
-p.poly(4, 0);
+p.poly(8);
 
 
 function note(color, note, direction)
 (
+  color == "mine_blue" ? (
+    gfx_x = blue_x_final;
+    gfx_y = 70 + blue_y_final; 
+    gfx_blit(8, 1, 0);
+  );
+  
+  color == "mine_red" ? (
+      gfx_x = red_x_final;
+      gfx_y = 70 + red_y_final; 
+      gfx_blit(8, 1, 0);
+    );
+  
   color == "red" ? (
   
-    gfx_x = 0;
-    gfx_y = 20;
-    debugstring = "red";
-    
     gfx_x = red_x_final;
     gfx_y = 70 + red_y_final;
     
     gfx_blit(1, 1, 0);
-    direction == 0 ? gfx_blit(2, 1, 3.1415926536) :
-    direction == 1 ? gfx_blit(2, 1, 0) :
-    direction == 2 ? gfx_blit(2, 1, 1.5707963268) :
-    direction == 3 ? gfx_blit(2, 1, 4.7123889804) :
-    direction == 4 ? gfx_blit(2, 1, 5.4977871438) :
-    direction == 5 ? gfx_blit(2, 1, 0.7853981634) :
-    direction == 6 ? gfx_blit(2, 1, 3.926990817) :
-    direction == 7 ? gfx_blit(2, 1, 2.3561944902) :
-    direction == 8 ? gfx_blit(3, 1, 0);
-    loop(10,
+    direction == 0 ? gfx_blit(4, 1, 3.1415926536) :
+    direction == 1 ? gfx_blit(4, 1, 0) :
+    direction == 2 ? gfx_blit(4, 1, 1.5707963268) :
+    direction == 3 ? gfx_blit(4, 1, 4.7123889804) :
+    direction == 4 ? gfx_blit(4, 1, 5.4977871438) :
+    direction == 5 ? gfx_blit(4, 1, 0.7853981634) :
+    direction == 6 ? gfx_blit(4, 1, 3.926990817) :
+    direction == 7 ? gfx_blit(4, 1, 2.3561944902) :
+    direction == 8 ? gfx_blit(5, 1, 0);
+    loop(7,
       gfx_muladdrect(red_x_final,70 + red_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
   
   );
   );
   color == "blue" ? (
-    
-      gfx_x = 200;
-      gfx_y = 20;
-      debugstring = "blue";
-        
+     
       gfx_x = blue_x_final;
       gfx_y = 70 + blue_y_final; 
       gfx_blit(0, 1, 0);
@@ -173,118 +194,14 @@ function note(color, note, direction)
       direction == 6 ? gfx_blit(2, 1, 3.926990817) :
       direction == 7 ? gfx_blit(2, 1, 2.3561944902) :
       direction == 8 ? gfx_blit(3, 1, 0);
-      loop(10,
+      loop(7,
        gfx_muladdrect(blue_x_final, 70 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
        ); 
       );
     );
-  
-
-
-        
-
-
-function deg(deg)
-     (
-       degrees = deg * (3.1459/180);
-       degrees;
-);
-/*
-function SortNotes() local (i j)
-(
-    swap = 0;
-    i = 0;
-    while (i <= countNotes)(
-        activeNotes[i] < activeNotes[i+1] ? (
-            tmp = activeNotes[i];
-            activeNotes[i] = activeNotes[i+1];
-            activeNotes[i+1] = tmp;
-            tmp = activeVel[i];
-            activeVel[i] = activeVel[i+1];
-            activeVel[i+1] = tmp;
-            tmp = activeCh[i];
-            activeCh[i] = activeCh[i+1];
-            activeCh[i+1] = tmp;            i = 0;
-            swap = 1;
-        );
-        swap == 0 ? i += 1;
-        swap = 0;
-    );
-);
-
-function GetNote()
-(
-    hNote = activeNotes[0];
-    hVel = activeVel[0];
-    lNote = activeNotes[countNotes-1];
-    lVel = activeVel[countNotes-1];
-    priority == 0 ? aNote = activeNotes[voice] : aNote = activeNotes[countNotes - voice - 1];
-    priority == 0 ? aVel = activeVel[voice] : aVel = activeVel[countNotes - voice - 1];
-    priority == 0 ? aCh = activeCh[voice] : aCh = activeCh[countNotes - voice - 1];
-    priority == 0 ? nNote = activeNotes[voice + 1] : nNote = activeNotes[countNotes - voice - 2];
-    priority == 0 ? nVel = activeVel[voice + 1] : nVel = activeVel[countNotes - voice - 2];
-    priority == 0 ? nCh = activeCh[voice + 1] : nCh = activeCh[countNotes - voice - 2];
-    
-    aNote == -1 ? (
-        altPriority == 0 ? (
-          aNote = hNote;
-          aVel = hVel;
-          aCh = hCh;
-        ) : altPriority == 1 ? (
-          aNote = lNote;
-          aVel = lVel;
-          aCh = lCh;
-        ) : altPriority == 2 ? (
-          aNote = nNote;
-          aVel = nVel;
-          aCh = nCh;
-        ) : altPriority == 3 ? (
-          aNote = -1;
-          aVel = -1;
-          aCh = -1;
-        );
-    );
-);
-
-function AddNote(msg1, msg2, msg3) local (i j swap)
-(
-    i = 0;
-    j = 0;
-    while ((j == 0) && (i <= countNotes)) (
-        activeNotes[i] == -1 ? (
-            j = 1;
-            activeNotes[i] = msg2;
-            activeVel[i] = max(msg3,1);
-            activeCh[i] = msg1 & 0x0F;               
-        ): i += 1;
-    );
-);
-
-function RemoveNote(msg2) local (i j)
-(
-    i = 0;
-    loop(128,
-     activeNotes[i] == msg2 ? (
-      activeNotes[i] = -1;
-      activeVel[i] = -1;
-      activeCh[i] = -1;
-     );
-     i += 1;
-    );
-);
-
-i = 0;
-loop(128,
-    activeNotes[i] = -1;
-    activeVel[i] = -1;
-    activeCh[i] = -1;
-    i += 1;
-);
-*/
 
 noteOn = $x90;
-noteon_cnt = 0;
-size = 2;
+
 blue_n = 200;
 blue_n[0] = 96;
 blue_n[1] = 97;
@@ -416,294 +333,183 @@ w2 = 75; h2 = 75;
 v = 6000;
 u = 7000;
 
-@slider
-something=slider1*srate;
 
 @block
-    // Until all midi events have been processed
-    while (n.notein()) (
-        // If midi event is a midi note
-        n.ok ? (
-            p.poly_do(n.pitch, n.velocity, n.channel);
-            // If a voice has been assigned
-            p.voice != -1 ? (
-               
-                p.voice == 0 ? (
-                   n1pitch = p.pitch;
-                   n1channel = p.channel; 
-                   n1velocity = p.velocity;  
-                   n1velocity == 0 ? (
-                   confirmpitch(n1pitch, n2pitch, n3pitch, n4pitch, obstacle_start, obstacle_end) ? (
-                                   o = 0;
-                                   loop(5,
-                                   
-                                   returnpitch == obstacle_n[o] ? (
-                                   wall[o] = 0;
-                                   ) : o+= 1;
-                                   );
-                                   );
-                   n1pitch = -1; n1channel = -1; n1velocity = -1;
+// Until all midi events have been processed
+while (n.notein()) (
+// If midi event is a midi note
+  n.ok ? (
+    p.poly_do(n.pitch, n.velocity, n.channel);
+    // If a voice has been assigned
+    /*
+    q = 0;
+    loop(9, 
+      p.voice == q ? (
+        noteq
+    );
+    */
 
-                   )            
-                ) : p.voice == 1 ? (
-                   n2pitch = p.pitch; 
-                   n2channel = p.channel;
-                   n2velocity = p.velocity;
-                   n2velocity == 0 ? (
-                   confirmpitch(n1pitch, n2pitch, n3pitch, n4pitch, obstacle_start, obstacle_end) ? (
-                                   o = 0;
-                                   loop(5,
-                                   
-                                   returnpitch == obstacle_n[o] ? (
-                                   wall[o] = 0;
-                                   ) : o+= 1;
-                                   );
-                                   );
-                   n2pitch = -1; n2channel = -1; n2velocity = -1;
-                   )
-                ) : p.voice == 2 ? (
-                    n3pitch = p.pitch;
-                    n3channel = p.channel;
-                    n3velocity = p.velocity;
-                    n3velocity == 0 ? (
-                    confirmpitch(n1pitch, n2pitch, n3pitch, n4pitch, obstacle_start, obstacle_end) ? (
-                                                       o = 0;
-                                                       loop(5,
-                                                       
-                                                       returnpitch == obstacle_n[o] ? (
-                                                       wall[o] = 0;
-                                                       ) : o+= 1;
-                                                       );
-                                                       );
-                    n3pitch = -1; n3channel = -1; n3velocity = -1;
-                    )
-                );
-                confirmpitch(n1pitch, n2pitch, n3pitch, n4pitch, blue_saber_start, blue_saber_end) ? (
-                u = 0;
-                loop(11,
-                  returnpitch == blue_n[u] ? (
-                    blue_x_final = blue_x_note[u];
-                    blue_y_final = blue_y_note[u];
-                    blue_notecut_direction = blue_cut_direction[u];
-                    gfx_r = 1; gfx_g = 1; gfx_b =1;
-                    ) : u+= 1;
-                  );
-                ) : (
-                a = 666;
-                );
-                confirmpitch(n1pitch, n2pitch, n3pitch, n4pitch, red_saber_start, red_saber_end) ? (
-                v = 0;
-                loop(11,
-                  returnpitch == red_n[v] ? (
-                    red_x_final = red_x_note[v];
-                    red_y_final = red_y_note[v];
-                    red_notecut_direction = red_cut_direction[v];
-                    gfx_r = 1; gfx_g = 1; gfx_b =1;
-                    ) : v+= 1;
-                  );
-                ) : (
-                b = 666;
-                );
-                
-                confirmpitch(n1pitch, n2pitch, n3pitch, n4pitch, obstacle_start, obstacle_end) ? (
-                o = 0;
-                loop(5,
-                
-                returnpitch == obstacle_n[o] ? (
-                wall[o] = 1;
-                ) : o+= 1;
-                  );
-                  );
-                );
-              );
-                       //debug2("countnotes 2 call");
-   );
-  
-               
-    
-
-
-                
-/*
-while (midirecv(ts,msg1,msg2,msg3)) (
-    midi_bus == bus ? (
-        midi_bus = bus;
-        // if note on
-        ((msg1 & 0xF0) == 0x90) && (msg3 > 0) ? (
-          _test = 1;
-          oNote = aNote;
-          oCh = aCh;
-          countNotes += 1;
-          AddNote(msg1, msg2, msg3);
-          SortNotes();
-          GetNote();
-          (aNote != oNote) ? (
-              _test = 3;
-              // send note on to new note
-              midisend(ts,0x90+aCh,aNote,aVel);
-              oNote != -1 ? (
-                // send note off to old note
-                midisend(ts,0x80+oCh,oNote,msg3);
-              );
-            );  
-
-                   
-        // if note off  
-        ) : (((msg1 & 0xF0) == 0x90) && (msg3 == 0)) ||
-          ((msg1 & 0xF0) == 0x80) ? (
-          _test = 2;
-          //midisend(ts,msg1,msg2,msg3);
-          oNote = aNote;
-          oCh = aCh;
-          countNotes -= 1;
-          RemoveNote(msg2);
-          SortNotes();
-          GetNote();
-           
+       
+      p.voice == 0 ? (
+          note1[0] = p.pitch;
+          note1[1] = p.channel;
+          note1[2] = p.velocity;
+          note1[2] == 0 ? (
+          confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, obstacle_start, obstacle_end) ? (
+            o = 0;
+            loop(5,
+              returnpitch[0] == obstacle_n[o] ? (
+                wall[o] = 0;
+              ) : o+= 1;
+            );
+          );
+        note1[0] = -1; note1[1] = -1; note1[2] = -1;
+      )     
+                 
+    ) : p.voice == 1 ? (
+          note2[0] = p.pitch;
+          note2[1] = p.channel;
+          note2[2] = p.velocity;
+          note2[2] == 0 ? (
+          confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, obstacle_start, obstacle_end) ? (
+            o = 0;
+            loop(5,
+              returnpitch[0] == obstacle_n[o] ? (
+                wall[o] = 0;
+              ) : o+= 1;
+            );
+          );
+        note2[0] = -1; note2[1] = -1; note2[2] = -1;
+      )
           
-          //aNote | hNote | iNote | oNote == obstacle_n[0] ? wall1 = 1;
-  
-          //(iNote == obstacle_n[p] ? (wall1  = 1) :
-          //(oNote == obstacle_n[p] ? (wall1 = 1) ;
-
-          (aNote != oNote)? (
-              _test = 4;
-
-            );      
-        ) : midisend(ts,msg1,msg2,msg3);
-    ) : midisend(ts,msg1,msg2,msg3);
+    ) : p.voice == 2 ? (
+          note3[0] = p.pitch;
+          note3[1] = p.channel;
+          note3[2] = p.velocity;
+          note3[2] == 0 ? (
+          confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, obstacle_start, obstacle_end) ? (
+            o = 0;
+            loop(5,                                              
+              returnpitch[0] == obstacle_n[o] ? (
+                wall[o] = 0;
+              ) : o+= 1;
+            );
+          );
+        note3[0] = -1; note3[1] = -1; note3[2] = -1;
+      )
     
+    ) : p.voice == 4 ? ( //??? possible bug in CookDSP
+          note4[0] = p.pitch;
+          note4[1] = p.channel;
+          note4[2] = p.velocity;
+          note4[2] == 0 ? (
+          confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, obstacle_start, obstacle_end) ? (
+            o = 0;
+            loop(5,                                              
+              returnpitch[0] == obstacle_n[o] ? (
+                wall[o] = 0;
+              ) : o+= 1;
+            );
+          );
+       note4[0] = -1; note4[1] = -1; note4[2] = -1;
+      )
+     ) : p.voice == 5 ? ( //??? possible bug in CookDSP
+                note5[0] = p.pitch;
+                note5[1] = p.channel;
+                note5[2] = p.velocity;
+                note5[2] == 0 ? (
+                confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, obstacle_start, obstacle_end) ? (
+                  o = 0;
+                  loop(5,                                              
+                    returnpitch[0] == obstacle_n[o] ? (
+                      wall[o] = 0;
+                    ) : o+= 1;
+                  );
+                );
+             note5[0] = -1; note5[1] = -1; note5[2] = -1;
+            )
+    );
 
-    countNotes == 4 ? (
-    //debug2("countnotes 2 call");
-     u = 0;
-     loop(11,
-       nNote == blue_n[u] ? (
-         blue_x_final = blue_x_note[u];
-         blue_y_final = blue_y_note[u];
-         blue_notecut_direction = blue_cut_direction[u];
-         gfx_r = 1; gfx_g = 1; gfx_b =1;
-         ) : u+= 1;
-       );
-      
-      
-      
-   v = 0;  
+  confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, blue_saber_start, blue_saber_end) ? (
+    u = 0;
+    bluenote = returnpitch;
     loop(11,
-        aNote == red_n[v] ? (
-          red_x_final = red_x_note[v];
-         red_y_final = red_y_note[v];
-          red_notecut_direction = red_cut_direction[v];
-          gfx_r = 1; gfx_g = 1; gfx_b =1;
-          ) : v+= 1;
-        );
-       
+      bluenote[0] == blue_n[u] ? (
+        blue_x_final = blue_x_note[u];
+        blue_y_final = blue_y_note[u];
+        blue_notecut_direction = blue_cut_direction[u];
+        gfx_r = 1; gfx_g = 1; gfx_b =1;
+      ) : u+= 1;
     );
-      
-      
-        
-   
-    countNotes == 3 ? (
-    //debug2("countnotes 2 call");
-     u = 0;
-     loop(11,
-       nNote == blue_n[u] ? (
-         blue_x_final = blue_x_note[u];
-         blue_y_final = blue_y_note[u];
-         blue_notecut_direction = blue_cut_direction[u];
-         gfx_r = 1; gfx_g = 1; gfx_b =1;
-         ) : u+= 1;
-       );
-      
-      
-      
-   v = 0;  
-    loop(11,
-        aNote == red_n[v] ? (
-          red_x_final = red_x_note[v];
-         red_y_final = red_y_note[v];
-          red_notecut_direction = red_cut_direction[v];
-          gfx_r = 1; gfx_g = 1; gfx_b =1;
-          ) : v+= 1;
-        );
-       
-    );
-      
-      
-      
-    countNotes == 2 ? (
-    //debug2("countnotes 2 call");
-    nNote >= obstacle_start && nNote <= obstacle_end ? (
-     u = 0;
-     loop(11,
-       aNote == blue_n[u] ? (
-         blue_x_final = blue_x_note[u];
-         blue_y_final = blue_y_note[u];
-         blue_notecut_direction = blue_cut_direction[u];
-         gfx_r = 1; gfx_g = 1; gfx_b =1;
-         ) : u+= 1;
-       );
+  ) : (
+      a = 666;
       );
       
-      
-   v = 0;  
+  confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, red_saber_start, red_saber_end) ? (
+    v = 0;
+    rednote = returnpitch;
     loop(11,
-        aNote == red_n[v] ? (
-          red_x_final = red_x_note[v];
-         red_y_final = red_y_note[v];
-          red_notecut_direction = red_cut_direction[v];
-          gfx_r = 1; gfx_g = 1; gfx_b =1;
-          ) : v+= 1;
-        );
-       
+      rednote[0] == red_n[v] ? (
+        red_x_final = red_x_note[v];
+        red_y_final = red_y_note[v];
+        red_notecut_direction = red_cut_direction[v];
+        gfx_r = 1; gfx_g = 1; gfx_b =1;
+      ) : v+= 1;
     );
-        
-        countNotes == 1 ? (
-        //debug2("countnotes 1 call");
-         
+  ) : (
+        b = 666;
+      );
+          
+  ///*
+  confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, obstacle_start, obstacle_end) ? (
+    o = 0;
+    loop(5,
+      returnpitch[0] == obstacle_n[o] ? (
+        wall[o] = 1;
+          ) : o+= 1;        
+        );
+      );
+  confirmpitch(note9, note8, note7, note6, note5, note4, note3, note2, note1, obstacle_start, obstacle_end) ? ( //why write good code if you can write hacks instead
+    o = 0;
+    loop(5,
+      returnpitch[0] == obstacle_n[o] ? (
+        wall[o] = 1;
+          ) : o+= 1;        
+        );
+      );
+      //*/
+    );
+  );
 
-    u = 0;
-    v = 0;  
-    loop(11,
-    activenotes[0] == blue_n[u] ? (
-    blue_x_final = blue_x_note[u];
-    blue_y_final = blue_y_note[u];
-    blue_notecut_direction = blue_cut_direction[u];
-    gfx_r = 1; gfx_g = 1; gfx_b =1;
-    ) : u2+= 1;
-    activenotes[0] == red_n[v] ? (
-    red_x_final = red_x_note[v];
-    red_y_final = red_y_note[v];
-    red_notecut_direction = red_cut_direction[v];
-    gfx_r = 1; gfx_g = 1; gfx_b =1;
-    ) : v2+= 1;
-  );       
-  );     
-        
-);
-/*
-                
-                 
-       
-      
+  
 
- 
 
 @gfx
-/*gfx_x = 200;
-gfx_y = 120;
-gfx_drawnumber(n.pitch,2);
-*/
-
-gfx_loadimg(0, image1);
-gfx_loadimg(1, image2);
-gfx_loadimg(2, image3);
-gfx_loadimg(3, image4);
-wall[0] == 1 ? gfx_muladdrect(0,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
-wall[1] == 1 ? gfx_muladdrect(100,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
-wall[2] == 1 ? gfx_muladdrect(200,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
-wall[3] == 1 ? gfx_muladdrect(300,100,80,300, 0, 0, 0, 0, .1, 0, 0, 0); 
-wall[4] == 1 ? gfx_muladdrect(0,10,380,80, 0, 0, 0, 0, .1, 0, 0, 0); 
+wall[0] == 1 ? (
+gfx_x = 300;
+gfx_y = 50; 
+gfx_blit(6, 1, 0);
+);
+wall[1] == 1 ? (
+gfx_x = 200;
+gfx_y = 50; 
+gfx_blit(6, 1, 0);
+);
+wall[2] == 1 ? (
+gfx_x = 100;
+gfx_y = 50; 
+gfx_blit(6, 1, 0);
+);
+wall[3] == 1 ? (
+gfx_x = 0;
+gfx_y = 50; 
+gfx_blit(6, 1, 0);
+);
+wall[4] == 1 ? (
+gfx_x = 10;
+gfx_y = 50; 
+gfx_blit(7, 1, 0);
+);; 
 
 gfx_gradrect(0,250,400,500, 0,0,0,0, 0, 0, 0, 0, .8/250, .8/250, .8/250, 1/250, 0);
 
@@ -717,24 +523,30 @@ x = 0;
 //gfx_y = 20;
 gfx_a = 1;
 
-  msg2 != 0 ? (  
-    confirmpitch(n1pitch, n2pitch, n3pitch, n4pitch, blue_saber_start, blue_saber_end) ? (
-    note("blue", n3pitch , blue_notecut_direction); 
+  msg2 != 0 ? (
+      
+    confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, blue_saber_start, blue_saber_end) ? (
+    bluenote = returnpitch;    
+    bluenote[1] == 10 ? (
+      note("blue", bluenote, blue_notecut_direction); 
+    ) : bluenote[1] == 11 ? (
+      note("mine_blue", bluenote, 0);
+    ) : bluenote[1] <= 9 ? ( 
+      note("blue", bluenote, bluenote[1]);
+      );
     );
-    confirmpitch(n1pitch, n2pitch, n3pitch, n4pitch, red_saber_start, red_saber_end) ? (
-    note("red", n2pitch , red_notecut_direction); 
+    
+    confirmpitch(note1, note2, note3, note4, note5, note6, note7, note8, note9, red_saber_start, red_saber_end) ? (
+    rednote = returnpitch;
+    rednote[1] == 10 ? (
+      note("red", rednote, red_notecut_direction); 
+    ) : rednote[1] == 11 ? (
+      note("mine_red", rednote, 0);
+    ) : rednote[1] <= 9 ? (  
+      note("red", rednote, rednote[1]);
     );
-      /*countNotes == 4 ? (
-        lNote >= obstacle_start && lNote <= obstacle_end ? ( 
-        lNote == obstacle_n[0] ? wall1 = 1 :
-        lNote == obstacle_n[1] ? wall2 = 1 :
-        lNote == obstacle_n[2] ? wall3 = 1 :
-        lNote == obstacle_n[3] ? wall4 = 1 : 
-        lNote == obstacle_n[4] ? wall5 = 1;
-        );
-      */
+  );
 );
- 
  
 
 @sample
