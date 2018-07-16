@@ -13,6 +13,145 @@ filename:8,MIDIbeat_visualization_mine.png
 
 @init
 
+//init note json
+
+cut_up = 0;
+cut_down = 1;
+cut_left = 2;
+cut_right = 3;
+cut_upleft = 4;
+cut_upright = 5;
+cut_downleft = 6;
+cut_downright = 7;
+cut_any = 8;
+
+layer_bot = 200;
+layer_mid = 100;
+layer_top = 0;
+
+line_left = 0;
+line_midleft = 100;
+line_midright = 200;
+line_right = 300;
+
+
+
+//FAVORITES HERE
+
+blue_n = 200;
+blue_n[0] = 96;
+blue_n[1] = 97;
+blue_n[2] = 98;
+blue_n[3] = 99;
+blue_n[4] = 100;
+blue_n[5] = 101;
+blue_n[6] = 102;
+blue_n[7] = 103;
+blue_n[8] = 104;
+blue_n[9] = 105;
+blue_n[10] = 106;
+
+blue_saber_start = 96;
+blue_saber_end = 106;
+ 
+blue_x_note = 1200;
+blue_x_note[0] = line_midright;
+blue_x_note[1] = line_midright;
+blue_x_note[2] = line_right;
+blue_x_note[3] = line_right;
+blue_x_note[4] = line_left;
+blue_x_note[5] = line_right;
+blue_x_note[6] = line_right;
+blue_x_note[7] = line_right;
+blue_x_note[8] = line_midright;
+blue_x_note[9] = line_midright;
+blue_x_note[10] = line_midright;
+
+blue_y_note = 1500;
+blue_y_note[0] = layer_bot;
+blue_y_note[1] = layer_bot;
+blue_y_note[2] = layer_bot;
+blue_y_note[3] = layer_bot;
+blue_y_note[4] = layer_bot;
+blue_y_note[5] = layer_mid;
+blue_y_note[6] = layer_bot;
+blue_y_note[7] = layer_top;
+blue_y_note[8] = layer_bot;
+blue_y_note[9] = layer_bot;
+blue_y_note[10] = layer_bot;
+
+blue_cut_direction = 1700;
+blue_cut_direction[0] = cut_down;
+blue_cut_direction[1] = cut_up;
+blue_cut_direction[2] = cut_down;
+blue_cut_direction[3] = cut_up;
+blue_cut_direction[4] = cut_right;
+blue_cut_direction[5] = cut_left;
+blue_cut_direction[6] = cut_downright;
+blue_cut_direction[7] = cut_any;
+blue_cut_direction[8] = cut_down;
+blue_cut_direction[9] = cut_down;
+blue_cut_direction[10] = cut_down;
+
+red_n = 700;
+red_n[0] = 108;
+red_n[1] = 109;
+red_n[2] = 110;
+red_n[3] = 111;
+red_n[4] = 112;
+red_n[5] = 113;
+red_n[6] = 114;
+red_n[7] = 115;
+red_n[8] = 116;
+red_n[9] = 117;
+red_n[10] = 118;
+
+red_saber_start = 108;
+red_saber_end = 118;
+
+red_x_note = 2200;
+red_x_note[0] = line_midleft;
+red_x_note[1] = line_midleft;
+red_x_note[2] = line_left;
+red_x_note[3] = line_left;
+red_x_note[4] = line_left;
+red_x_note[5] = line_right;
+red_x_note[6] = line_left;
+red_x_note[7] = line_left;
+red_x_note[8] = line_midleft;
+red_x_note[9] = line_midleft;
+red_x_note[10] = line_midleft;
+
+red_y_note = 2500;
+red_y_note[0] = layer_bot;
+red_y_note[1] = layer_bot;
+red_y_note[2] = layer_bot;
+red_y_note[3] = layer_bot;
+red_y_note[4] = layer_mid;
+red_y_note[5] = layer_bot;
+red_y_note[6] = layer_bot;
+red_y_note[7] = layer_top;
+red_y_note[8] = layer_bot;
+red_y_note[9] = layer_bot;
+red_y_note[10] = layer_bot;
+
+
+red_cut_direction = 2700;
+red_cut_direction[0] = cut_down;
+red_cut_direction[1] = cut_up;
+red_cut_direction[2] = cut_down;
+red_cut_direction[3] = cut_up;
+red_cut_direction[4] = cut_right;
+red_cut_direction[5] = cut_left;
+red_cut_direction[6] = cut_downleft;
+red_cut_direction[7] = cut_any;
+red_cut_direction[8] = cut_down;
+red_cut_direction[9] = cut_down;
+red_cut_direction[10] = cut_down;
+
+//FAVORITES END
+
+
 tmp = -1;
 
 image1 = file_open(0);
@@ -25,8 +164,6 @@ image7 = file_open(6);
 image8 = file_open(7);
 image9 = file_open(8);
 
-//note = 6700;
-
 qfx_note[0] = 6750;
 qfx_note[1] = 6800;
 qfx_note[2] = 6850;
@@ -36,8 +173,6 @@ qfx_note[5] = 7000;
 qfx_note[6] = 7050;
 qfx_note[7] = 7100;
 qfx_note[8] = 7150;
-
-//qfx_note = 9700;
 
 qfx_note[0] = 9750;
 qfx_note[1] = 9800;
@@ -87,7 +222,7 @@ function notein()
         // Retrieve midi note messages
         (msg1 & 0xF0) == 0x90 || (msg1 & 0xF0) == 0x80 ? (
             this.ok = 1;
-            this.channel = (msg1 & 0x0F) + 1;
+            this.channel = (msg1 & 0x0F);
             this.pitch = msg2;
             this.velocity = msg3;
         ) : (
@@ -166,42 +301,43 @@ function poly_do(pitch velocity channel)
 
 p.poly(8);
 
+function wall(inputnote, onoroff)
+(
+  onoroff == "on" ? (
+    inputnote[0] == obstacle_n[0] ? wall[0] = 1 :
+     inputnote[0] == obstacle_n[1] ? wall[1] = 1 :
+     inputnote[0] == obstacle_n[2] ? wall[2] = 1 :
+     inputnote[0] == obstacle_n[3] ? wall[3] = 1 :
+     inputnote[0] == obstacle_n[4] ? wall[4] = 1;
+    ) : (
+    inputnote[0] == obstacle_n[0] ? wall[0] = 0 :
+    inputnote[0] == obstacle_n[1] ? wall[1] = 0 :
+    inputnote[0] == obstacle_n[2] ? wall[2] = 0 :
+    inputnote[0] == obstacle_n[3] ? wall[3] = 0 :
+    inputnote[0] == obstacle_n[4] ? wall[4] = 0; 
+  );
+);
 
 function note(color, inputnote, direction)
 (
-
-
-  //gfx_r = 1; gfx_g = 1; gfx_b =1;
   color == "mine_blue" ? (
-  //gfx_x = blue_x_final;
-  //gfx_y = 70 + blue_y_final; 
-  
-  ///*
   gfx_x = inputnote[3];
   gfx_y = 70 + inputnote[4];
-  //*/
-    //gfx_x = 0; gfx_y = 0;
     gfx_blit(8, 1, 0);
   );
   
   color == "mine_red" ? (
-      ///*
       gfx_x = inputnote[3];
       gfx_y = 70 + inputnote[4]; 
-      //*/
-      //gfx_x = 100; gfx_y = 100;
       gfx_blit(8, 1, 0);
     );
   
   color == "red" ? (
-    ///*
     gfx_x = inputnote[3];
     gfx_y = 70 + inputnote[4]; 
-    //*/
-    //gfx_x = 200; gfx_y = 200;
     gfx_blit(1, 1, 0);
-    direction == 0 ? gfx_blit(4, 1, 3.1415926536) :
-    direction == 1 ? gfx_blit(4, 1, 0) :
+    direction == 0 ? gfx_blit(4, 1, 0) :
+    direction == 1 ? gfx_blit(4, 1, 3.1415926536) :
     direction == 2 ? gfx_blit(4, 1, 1.5707963268) :
     direction == 3 ? gfx_blit(4, 1, 4.7123889804) :
     direction == 4 ? gfx_blit(4, 1, 5.4977871438) :
@@ -209,12 +345,9 @@ function note(color, inputnote, direction)
     direction == 6 ? gfx_blit(4, 1, 3.926990817) :
     direction == 7 ? gfx_blit(4, 1, 2.3561944902) :
     direction == 8 ? gfx_blit(5, 1, 0);
+  
     
-    /*
-    loop(10, 
-    gfx_muladdrect(red_x_final, 70 + red_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
-    );
-    */
+    
   );
   color == "blue" ? (
      ///*
@@ -224,8 +357,8 @@ function note(color, inputnote, direction)
       //gfx_x = 300; gfx_y = 300;
       gfx_blit(0, 1, 0);
            
-      direction == 0 ? gfx_blit(2, 1, 3.1415926536) :
-      direction == 1 ? gfx_blit(2, 1, 0) :
+      direction == 0 ? gfx_blit(2, 1, 0) :
+      direction == 1 ? gfx_blit(2, 1, 3.1415926536) :
       direction == 2 ? gfx_blit(2, 1, 1.5707963268) :
       direction == 3 ? gfx_blit(2, 1, 4.7123889804) :
       direction == 4 ? gfx_blit(2, 1, 5.4977871438) :
@@ -243,116 +376,6 @@ function note(color, inputnote, direction)
     );
 
 noteOn = $x90;
-
-blue_n = 200;
-blue_n[0] = 96;
-blue_n[1] = 97;
-blue_n[2] = 98;
-blue_n[3] = 99;
-blue_n[4] = 100;
-blue_n[5] = 101;
-blue_n[6] = 102;
-blue_n[7] = 103;
-blue_n[8] = 104;
-blue_n[9] = 105;
-blue_n[10] = 106;
-
-blue_saber_start = 96;
-blue_saber_end = 106;
- 
-blue_x_note = 1200;
-blue_x_note[0] = 200;
-blue_x_note[1] = 200;
-blue_x_note[2] = 300;
-blue_x_note[3] = 300;
-blue_x_note[4] = 0;
-blue_x_note[5] = 300;
-blue_x_note[6] = 300;
-blue_x_note[7] = 300;
-blue_x_note[8] = 200;
-blue_x_note[9] = 200;
-blue_x_note[10] = 200;
-
-blue_y_note = 1500;
-blue_y_note[0] = 200;
-blue_y_note[1] = 200;
-blue_y_note[2] = 200;
-blue_y_note[3] = 200;
-blue_y_note[4] = 200;
-blue_y_note[5] = 100;
-blue_y_note[6] = 200;
-blue_y_note[7] = 0;
-blue_y_note[8] = 200;
-blue_y_note[9] = 200;
-blue_y_note[10] = 200;
-
-blue_cut_direction = 1700;
-blue_cut_direction[0] = 1;
-blue_cut_direction[1] = 0;
-blue_cut_direction[2] = 1;
-blue_cut_direction[3] = 0;
-blue_cut_direction[4] = 3;
-blue_cut_direction[5] = 2;
-blue_cut_direction[6] = 7;
-blue_cut_direction[7] = 8;
-blue_cut_direction[8] = 1;
-blue_cut_direction[9] = 1;
-blue_cut_direction[10] = 1;
-
-red_n = 700;
-red_n[0] = 108;
-red_n[1] = 109;
-red_n[2] = 110;
-red_n[3] = 111;
-red_n[4] = 112;
-red_n[5] = 113;
-red_n[6] = 114;
-red_n[7] = 115;
-red_n[8] = 116;
-red_n[9] = 117;
-red_n[10] = 118;
-
-red_saber_start = 108;
-red_saber_end = 118;
-
-red_x_note = 2200;
-red_x_note[0] = 100;
-red_x_note[1] = 100;
-red_x_note[2] = 0;
-red_x_note[3] = 0;
-red_x_note[4] = 0;
-red_x_note[5] = 300;
-red_x_note[6] = 0;
-red_x_note[7] = 0;
-red_x_note[8] = 100;
-red_x_note[9] = 100;
-red_x_note[10] = 100;
-
-red_y_note = 2500;
-red_y_note[0] = 200;
-red_y_note[1] = 200;
-red_y_note[2] = 200;
-red_y_note[3] = 200;
-red_y_note[4] = 100;
-red_y_note[5] = 200;
-red_y_note[6] = 200;
-red_y_note[7] = 0;
-red_y_note[8] = 200;
-red_y_note[9] = 200;
-red_y_note[10] = 200;
-
-red_cut_direction = 2700;
-red_cut_direction[0] = 1;
-red_cut_direction[1] = 0;
-red_cut_direction[2] = 1;
-red_cut_direction[3] = 0;
-red_cut_direction[4] = 3;
-red_cut_direction[5] = 2;
-red_cut_direction[6] = 6;
-red_cut_direction[7] = 8;
-red_cut_direction[8] = 1;
-red_cut_direction[9] = 1;
-red_cut_direction[10] = 1;
 
 obstacle_n = 5500;
 obstacle_n[0] = 89;
@@ -378,7 +401,8 @@ while (n.notein()) (
 // If midi event is a midi note
   n.ok ? (
     p.poly_do(n.pitch, n.velocity, n.channel);
-    gfx_r = 1; gfx_g = 1; gfx_b =1;
+    //n.velocity > 0 ? gfx_r = 1; gfx_g = 1; gfx_b =1 ;
+    //n.velocity == 0 ? gfx_r = 0; gfx_g = 0; gfx_b = 0;
     i = 0;
     loop(8, 
       p.voice == i ? ( 
@@ -387,16 +411,18 @@ while (n.notein()) (
         note[i][1] = p.channel;
         note[i][2] = p.velocity;
         
-          u = 0;
+
         loop(8,   
-           
-               loop(10,
+          u = 0; 
+               loop(11,
                 confirmnote(note[i][0], blue_saber_start, blue_saber_end) == 1 ? (
                  note[i][0] == blue_n[u] ? (
         
                    note[i][3] = blue_x_note[u];
                    note[i][4] = blue_y_note[u];
                    note[i][5] = blue_cut_direction[u];
+                   
+                   note[i][2] == 0 ? note[i][0] = -1;
         
                  );
                  u+= 1;
@@ -404,21 +430,39 @@ while (n.notein()) (
               );
                  
             v = 0;
-            loop(10,
+            loop(11,
             confirmnote(note[i][0], red_saber_start, red_saber_end) == 1 ? (
               note[i][0] == red_n[v] ? (        
                 note[i][3] = red_x_note[v];
                 note[i][4] = red_y_note[v];
                 note[i][5] = red_cut_direction[v];
                 
+                note[i][2] == 0 ? note[i][0] = -1;
+
+              
          
               );
                v+= 1;
             );
             );
+            
+            q = 0;
+            loop(5,
+            confirmnote(note[i][0], obstacle_start, obstacle_end) == 1 ? (
+              note[i][0] == obstacle_n[q] ? (        
+                //note[i][2] == 0 ? note[i][0] = -1;
+                note[i][2] == 0 ? wall(note[i], "off");
+                );
+                
+            
+            
+               q+= 1;
+            );
+            
+            );
         
-        );  
-                        
+          
+         );               
       );
 i += 1;
         
@@ -443,10 +487,11 @@ gfx_y = 50;
 gfx_drawstr(stringdraw, 2);
 
 drawy = 0;
+debug = 0;
 loop(8,
   gfx_x = 100;
   gfx_y = 80 + 20*drawy; 
-  gfx_drawnumber(numberdraw[drawy], 2);
+  debug == 1 ? gfx_drawnumber(numberdraw[drawy], 2);
   drawy += 1;
 );
 
@@ -485,8 +530,6 @@ a = 0;
 y = 50;
 x = 0;
 
-//gfx_x = 200;
-//gfx_y = 20;
 gfx_a = 1;
 
 msg2 != 0 ? (
@@ -515,26 +558,22 @@ msg2 != 0 ? (
   //numberdraw[q2] = gfx_note[q2][2];
   
   //x
-    
+  //numberdraw[q2] = gfx_note[q2][3];
   
   //y
   //numberdraw[q2] = gfx_note[q2][4];
-    numberdraw[q2] = gfx_note[q2][0];
     
     confirmnote(gfx_note[q2][0], blue_saber_start, blue_saber_end) == 1 ? (
   
-      gfx_note[q2][1] == 11 ? (
-  //numberdraw2 = gfx_note[q2][0][0];
+      gfx_note[q2][1] == 10 ? (
         note("mine_blue", gfx_note[q2], 0);
           ) :
   
-      gfx_note[q2][1] == 10 ? (
+      gfx_note[q2][1] == 9 ? (
         note("blue", gfx_note[q2], gfx_note[q2][5]); 
-        //stringdraw = "blue normal";
           ) : 
   
-      gfx_note[q2][1] <= 9 ? (
-        stringdraw = "blue not favorite"; 
+      gfx_note[q2][1] <= 8 ? (
         note("blue", gfx_note[q2], gfx_note[q2][1]);
           );
         );
@@ -547,18 +586,15 @@ msg2 != 0 ? (
   
     confirmnote(gfx_note[q3][0], red_saber_start, red_saber_end) == 1 ? (
   
-      gfx_note[q3][1] == 11 ? (
-        stringdraw = "red mine";
+      gfx_note[q3][1] == 10 ? (
         note("mine_red", gfx_note[q3], 0);
         ) :
     
-      gfx_note[q3][1] == 10 ? (
-        stringdraw = "red normal";
+      gfx_note[q3][1] == 9 ? (
         note("red", gfx_note[q3], gfx_note[q3][5]); 
         ) : 
       
-      gfx_note[q3][1] <= 9 ? (  
-        stringdraw = "red not favorite";
+      gfx_note[q3][1] <= 8 ? (  
         note("red", gfx_note[q3], gfx_note[q3][1]);
         );  
       );
@@ -583,42 +619,18 @@ msg2 != 0 ? (
     q5 += 1;
   
     );
-  );
-   
-     
-
-   
-         
-      
-
+  q6 = 0;
+  loop(8, 
+    confirmnote(gfx_note[q6][0], obstacle_start, obstacle_end) == 1 ? (
+      gfx_note[q6][2] > 0 ? wall(gfx_note[q6], "on");
+      ;
+    );
+    q6 += 1;
+  
+    );
     
-      //);
-      //note[q][0] = -1; note[q][1] = -1; note[q][2] = -1;
-
-  /*
-  loop(9,
-     qfx_note[q2] = note[q2];
-     confirmnote(gfx_note[q2][0], blue_saber_start, blue_saber_end) == 1 ? (
-     gfx_note[q2][1] == 10 ? (
-       note("blue", bluenote, blue_notecut_direction); 
-     ) : gfx_note[q2][1] == 11 ? (
-       note("mine_blue", bluenote, 0);
-     ) : gfx_note[q2][1] <= 9 ? ( 
-       note("blue", bluenote, gfx_note[q2][1]);
-       ); 
-      );
-    confirmnote(gfx_note[q2][0], red_saber_start, red_saber_end) == 1 ? (
-     gfx_note[q2][1] == 10 ? (
-       note("red", rednote, red_notecut_direction); 
-     ) : gfx_note[q2][1] == 11 ? (
-       note("mine_red", rednote, 0);
-     ) : gfx_note[q2][1] <= 9 ? (  
-       note("red", rednote, gfx_note[q2][1]);
-     );
-     );
-     */
-
-//);
+    );
+   
 @sample
 spl0=spl0;
 spl1=spl1;
