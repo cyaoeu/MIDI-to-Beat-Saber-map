@@ -49,10 +49,27 @@ qfx_note[6] = 10050;
 qfx_note[7] = 10100;
 qfx_note[8] = 10150;
 
+q2 = 14000;
+q3 = 16000;
+q4 = 18000;
+q5 = 20000;
+
+z = 22000;
+
+
+
+
+numberdraw = 10300;
+
 
 function confirmnote(note, start, end)
 (
 note >= start && note <= end ? 1 : 0;
+);
+
+function confirmmine(note, channel, start, end)
+(
+(note >= start && note <= end) && (channel == 11) ? 1 : 0;
 );
 
 function memalloc(size)
@@ -150,26 +167,38 @@ function poly_do(pitch velocity channel)
 p.poly(8);
 
 
-function note(color, note, direction)
+function note(color, inputnote, direction)
 (
+
+
   //gfx_r = 1; gfx_g = 1; gfx_b =1;
   color == "mine_blue" ? (
-    gfx_x = blue_x_final;
-    gfx_y = 70 + blue_y_final; 
+  //gfx_x = blue_x_final;
+  //gfx_y = 70 + blue_y_final; 
+  
+  ///*
+  gfx_x = inputnote[3];
+  gfx_y = 70 + inputnote[4];
+  //*/
+    //gfx_x = 0; gfx_y = 0;
     gfx_blit(8, 1, 0);
   );
   
   color == "mine_red" ? (
-      gfx_x = red_x_final;
-      gfx_y = 70 + red_y_final; 
+      ///*
+      gfx_x = inputnote[3];
+      gfx_y = 70 + inputnote[4]; 
+      //*/
+      //gfx_x = 100; gfx_y = 100;
       gfx_blit(8, 1, 0);
     );
   
   color == "red" ? (
-  
-    gfx_x = red_x_final;
-    gfx_y = 70 + red_y_final;
-    
+    ///*
+    gfx_x = inputnote[3];
+    gfx_y = 70 + inputnote[4]; 
+    //*/
+    //gfx_x = 200; gfx_y = 200;
     gfx_blit(1, 1, 0);
     direction == 0 ? gfx_blit(4, 1, 3.1415926536) :
     direction == 1 ? gfx_blit(4, 1, 0) :
@@ -188,9 +217,11 @@ function note(color, note, direction)
     */
   );
   color == "blue" ? (
-     
-      gfx_x = blue_x_final;
-      gfx_y = 70 + blue_y_final; 
+     ///*
+      gfx_x = inputnote[3];
+      gfx_y = 70 + inputnote[4]; 
+      //*/
+      //gfx_x = 300; gfx_y = 300;
       gfx_blit(0, 1, 0);
            
       direction == 0 ? gfx_blit(2, 1, 3.1415926536) :
@@ -241,7 +272,6 @@ blue_x_note[7] = 300;
 blue_x_note[8] = 200;
 blue_x_note[9] = 200;
 blue_x_note[10] = 200;
-blue_y_note[11] = 10000;
 
 blue_y_note = 1500;
 blue_y_note[0] = 200;
@@ -255,7 +285,6 @@ blue_y_note[7] = 0;
 blue_y_note[8] = 200;
 blue_y_note[9] = 200;
 blue_y_note[10] = 200;
-blue_y_note[11] = 10000;
 
 blue_cut_direction = 1700;
 blue_cut_direction[0] = 1;
@@ -298,7 +327,6 @@ red_x_note[7] = 0;
 red_x_note[8] = 100;
 red_x_note[9] = 100;
 red_x_note[10] = 100;
-red_x_note[11] = 10000;
 
 red_y_note = 2500;
 red_y_note[0] = 200;
@@ -312,7 +340,6 @@ red_y_note[7] = 0;
 red_y_note[8] = 200;
 red_y_note[9] = 200;
 red_y_note[10] = 200;
-red_y_note[11] = 10000;
 
 red_cut_direction = 2700;
 red_cut_direction[0] = 1;
@@ -352,82 +379,57 @@ while (n.notein()) (
   n.ok ? (
     p.poly_do(n.pitch, n.velocity, n.channel);
     gfx_r = 1; gfx_g = 1; gfx_b =1;
-    q = 0;
-    loop(9, 
-      p.voice == q ? ( 
+    i = 0;
+    loop(8, 
+      p.voice == i ? ( 
       
-        note[q][0] = p.pitch;
-        note[q][1] = p.channel;
-        note[q][2] = p.velocity;
-        
-            note[q][2] == 0 ? (
-              o = 0;
-              loop(5,
-                note[q][0] == obstacle_n[o] ? (
-                  wall[o] = 0;
-                ) : o+= 1;
-            );
-        ); 
-        
-        /*
-        note[q][2] == 0 ? (
-        note[q][0] == -1; note[q][1] == -1; note[q][2] == -1;
-        );
-        */
+        note[i][0] = p.pitch;
+        note[i][1] = p.channel;
+        note[i][2] = p.velocity;
         
           u = 0;
-             loop(11,
-              confirmnote(note[q][0], blue_saber_start, blue_saber_end) == 1 ? (
-               note[q][0] == blue_n[u] ? (
-                 blue_x_final = blue_x_note[u];
-                 blue_y_final = blue_y_note[u];
-                 blue_notecut_direction = blue_cut_direction[u];
-                    //gfx_muladdrect(blue_x_final,70 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
-             
-                   
-               ) : u+= 1;
-             );
-                 //note[q][0] = -1; note[q][1] = -1; note[q][2] = -1;
-                 //q += 1;
-                 //); 
+        loop(8,   
+           
+               loop(10,
+                confirmnote(note[i][0], blue_saber_start, blue_saber_end) == 1 ? (
+                 note[i][0] == blue_n[u] ? (
+        
+                   note[i][3] = blue_x_note[u];
+                   note[i][4] = blue_y_note[u];
+                   note[i][5] = blue_cut_direction[u];
+        
+                 );
+                 u+= 1;
                );
-               
-          v = 0;
-          loop(11,
-          confirmnote(note[q][0], red_saber_start, red_saber_end) == 1 ? (
-            note[q][0] == red_n[v] ? (
-              red_x_final = red_x_note[v];
-              red_y_final = red_y_note[v];
-              red_notecut_direction = red_cut_direction[v];
-              
-               //gfx_muladdrect(red_x_final, 70 + red_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
-              
-              
-            ) : v+= 1;
-            //);
-            //note[q][0] = -1; note[q][1] = -1; note[q][2] = -1;
-            //q += 1;
-          );
-          );
-          
-      
-        o = 0;
-        loop(5,
-          note[q][0] == obstacle_n[o] ? (
-            wall[o] = 1;
-              ) : o+= 1;        
+              );
+                 
+            v = 0;
+            loop(10,
+            confirmnote(note[i][0], red_saber_start, red_saber_end) == 1 ? (
+              note[i][0] == red_n[v] ? (        
+                note[i][3] = red_x_note[v];
+                note[i][4] = red_y_note[v];
+                note[i][5] = red_cut_direction[v];
+                
+         
+              );
+               v+= 1;
             );
-            
-            
-            
-      
-      ) : (
-      q += 1;
+            );
+        
+        );  
+                        
       );
+i += 1;
+        
+        
+                
       
+      );
+      );
     );
-  );
-);
+      
+ 
             
 
 
@@ -439,9 +441,14 @@ gfx_r = 1; gfx_g = 1; gfx_b = 1;
 gfx_x = 100;
 gfx_y = 50; 
 gfx_drawstr(stringdraw, 2);
-gfx_x = 100;
-gfx_y = 80; 
-gfx_drawnumber(numberdraw, 2);
+
+drawy = 0;
+loop(8,
+  gfx_x = 100;
+  gfx_y = 80 + 20*drawy; 
+  gfx_drawnumber(numberdraw[drawy], 2);
+  drawy += 1;
+);
 
 
 wall[0] == 1 ? (
@@ -483,47 +490,110 @@ x = 0;
 gfx_a = 1;
 
 msg2 != 0 ? (
-  q2 = 0;
   
-  loop(9,
-    qfx_note[q2] = note[q2]; 
+  
+  
+  z = 0;        
+  loop(8,
+    qfx_note[z][0] = note[z][0]; 
+    qfx_note[z][1] = note[z][1]; 
+    qfx_note[z][2] = note[z][2]; 
+    z += 1;
     
+  );
     
-       
-       //gfx_note[q2][2] > 0 ? (  
+  
+  q2 = 0;
+  loop(8,
+  //pitch
+  //numberdraw[q2] = gfx_note[q2][0];
+  
+  //channel
+  //numberdraw[q2] = gfx_note[q2][1];
+  
+  //velocity
+  //numberdraw[q2] = gfx_note[q2][2];
+  
+  //x
+    
+  
+  //y
+  //numberdraw[q2] = gfx_note[q2][4];
+    numberdraw[q2] = gfx_note[q2][0];
     
     confirmnote(gfx_note[q2][0], blue_saber_start, blue_saber_end) == 1 ? (
-     
-      stringdraw = "blue";
+  
+      gfx_note[q2][1] == 11 ? (
+  //numberdraw2 = gfx_note[q2][0][0];
+        note("mine_blue", gfx_note[q2], 0);
+          ) :
+  
       gfx_note[q2][1] == 10 ? (
-        note("blue", bluenote, blue_notecut_direction); 
-        ) : gfx_note[q2][1] == 11 ? (
-        note("mine_blue", bluenote, 0);
-        ) : gfx_note[q2][1] <= 9 ? ( 
-        note("blue", bluenote, gfx_note[q2][1]);
+        note("blue", gfx_note[q2], gfx_note[q2][5]); 
+        //stringdraw = "blue normal";
+          ) : 
+  
+      gfx_note[q2][1] <= 9 ? (
+        stringdraw = "blue not favorite"; 
+        note("blue", gfx_note[q2], gfx_note[q2][1]);
+          );
         );
-  );   
-
-           
-
-    confirmnote(gfx_note[q2][0], red_saber_start, red_saber_end) == 1 ? (
-    stringdraw = "red";
-        gfx_note[q2][1] == 10 ? (
-          note("red", rednote, red_notecut_direction); 
-        ) : gfx_note[q2][1] == 11 ? (
-          note("mine_red", rednote, 0);
-        ) : gfx_note[q2][1] <= 9 ? (  
-          note("red", rednote, gfx_note[q2][1]);
-        );  
-        );     
-      //);
-      //note[q][0] = -1; note[q][1] = -1; note[q][2] = -1;
-      q2 += 1;
+    q2 += 1; 
     );
   
-);
+  q3 = 0;
+  loop(8,
+  //numberdraw[q3] = gfx_note[q3][0];
+  
+    confirmnote(gfx_note[q3][0], red_saber_start, red_saber_end) == 1 ? (
+  
+      gfx_note[q3][1] == 11 ? (
+        stringdraw = "red mine";
+        note("mine_red", gfx_note[q3], 0);
+        ) :
+    
+      gfx_note[q3][1] == 10 ? (
+        stringdraw = "red normal";
+        note("red", gfx_note[q3], gfx_note[q3][5]); 
+        ) : 
       
+      gfx_note[q3][1] <= 9 ? (  
+        stringdraw = "red not favorite";
+        note("red", gfx_note[q3], gfx_note[q3][1]);
+        );  
+      );
+    q3 += 1;
+    ); 
+  
+  q4 = 0;
+  loop(8,
+    confirmmine(gfx_note[q4][0], gfx_note[q4][1], blue_saber_start, blue_saber_end) == 1 ? (
+      note("mine_blue", gfx_note[q4], 0);
+      );
+  
+    q4 += 1;
+    );
+  
+  q5 = 0;
+  loop(8, 
+    confirmmine(gfx_note[q5][0], gfx_note[q5][1], red_saber_start, red_saber_end) == 1 ? (
+      note("mine_red", gfx_note[q5], 0);
+      ); 
+  
+    q5 += 1;
+  
+    );
+  );
+   
+     
+
+   
+         
       
+
+    
+      //);
+      //note[q][0] = -1; note[q][1] = -1; note[q][2] = -1;
 
   /*
   loop(9,
