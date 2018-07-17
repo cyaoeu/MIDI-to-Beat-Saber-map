@@ -20,13 +20,15 @@ class MIDIbeat:
         e1.pack()
         e1.focus_set()
 
-        master.bind('<Return>', self.execute)
+        master.bind('<Return>', self.notenamesexport)
         master.bind('<Escape>', self.close)
 
-        self.button = tk.Button(master, text='Execute')
+        self.button = tk.Button(master, text='MIDI to .json')
         self.button.bind('<Button-1>', self.execute)
+        self.button2 = tk.Button(master, text='Note names export')
+        self.button2.bind('<Button-1>', self.notenamesexport)
         self.button.pack()
-
+        self.button2.pack()
     def close(self, event):
         self.master.withdraw() # if you want to bring it back
         sys.exit() # if you want to exit the entire thing
@@ -42,12 +44,16 @@ class MIDIbeat:
 
     def execute(self, event):
         self.MidiReader()
+
+    def notenamesexport(self, event):
+        uf.CreateReaperNotenamesFile()
     #UI code end
+   
 
     def MidiReader(self):
-        beatmap = copy.deepcopy(settings.map)
+        beatmap = copy.deepcopy(s.map)
         currenttick = 0
-        mid = mido.MidiFile(settings.path + "beatsaber.mid")
+        mid = mido.MidiFile(s.path + "beatsaber.mid")
         ticks_per_beat = mid.ticks_per_beat
         for i, track in enumerate(mid.tracks):
             print('Track {}: {}'.format(i, track.name))
@@ -67,25 +73,34 @@ class MIDIbeat:
                         currentbeat = currenttick / ticks_per_beat
                         note = msg.note
                         channel = msg.channel
-                        if note in range(89, 93): #if note is obstacle
+                        if note in range(89, 94): #if note is obstacle
                             obstacle_ontime = currentbeat
                             midinote = [item[0] for item in s.obstacle_tuple if msg.note == item[1]]
                             toJSONobstacle = midinote[0]
                             print("NOTEON: " + "#" + str(note) + " (" + midinote[0] + ")") #debug
                             #print("#" + str(note) + " ch:" + str(channel))
                         
-                        elif note in range(96, 119):
+                        elif note in range(96, 120):
                             midinote = [item[0] for item in s.note_favorites if msg.note == item[1]]
                             if msg.channel == 9: #really channel 10 (there is no midi channel 0) TODO fix
                                 toJSONnote = midinote[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
+                                toJSONtime = currentbeat                          
+                                beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime, False))                                
+
+                            if msg.channel == 10: #really channel 11 (there is no midi channel 0) TODO fix
+                                toJSONnote = midinote[0]
+                                print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug   
+                                toJSONtime = currentbeat                          
+                                beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime, True))  
+                                                       
                             else:
                                 midichannel = [item[0] for item in s.cut_directions if msg.channel == item[1]]
                                 toJSONnote = midinote[0] + "-" + midichannel[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
-                            toJSONtime = currentbeat                          
-                            #print("#" + str(note) + " ch:" + str(channel))
-                            beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime))
+                                toJSONtime = currentbeat                          
+                                beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime, False))  
+
                             
                         else:
                             midinote = [item[0] for item in s.input_tuple if msg.note == item[1]]
@@ -94,7 +109,7 @@ class MIDIbeat:
                             toJSONtime = currentbeat
                             print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
                             #print("#" + str(note) + " ch:" + str(channel))
-                            beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime))
+                            beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime, False))
 
                     elif msg.type == "note_off" or msg.type == "note_on" and msg.velocity == 0:
                         currenttick += msg.time
@@ -155,7 +170,7 @@ class MIDIbeat:
                             beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                       
                     elif msg.type == "note_off" or msg.type == "note_on" and msg.velocity == 0:
-                        if note in range(96, 119):
+                        if note in range(96, 120):
                             currenttick += msg.time
                             currentbeat = currenttick / ticks_per_beat
                             note = msg.note
@@ -193,10 +208,13 @@ class MIDIbeat:
             json.dump(beatmap, outfile, indent=4)
             
 
-    def NoteToJSON(self, inputnote, time):
+    def NoteToJSON(self, inputnote, time, mine):
         outputnote = copy.deepcopy(s.note)
         inputnote = inputnote.split("-")
-        notetype = [item[1] for item in s.note_types if inputnote[0] == item[0]]
+        if mine:
+            notetype = "note_mine"
+        else:
+            notetype = [item[1] for item in s.note_types if inputnote[0] == item[0]]
         lineindex = [item[1] for item in s.line_indices if inputnote[1] == item[0]]
         linelayer = [item[1] for item in s.line_layers if inputnote[2] == item[0]]
         cutdirection = [item[1] for item in s.cut_directions if inputnote[3] == item[0]]

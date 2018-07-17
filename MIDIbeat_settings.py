@@ -6,57 +6,61 @@ songname = "Forbidden Fruit"
 ext = ".wav"
 
 note_favorites = [
-    #config favorites here: default C7-A#7 (96-106) for blue and C8-A#8 (108-118) for red)
+    #config favorites here: default C7-B7 (96-107) for blue and C8-B8 (108-119) for red)
     ("note_red-line_midleft-layer_bot-cut_down", 108),
-    ("note_red-line_midleft-layer_bot-cut_up", 109),
-    ("note_red-line_left-layer_bot-cut_down", 110),
+    ("note_red-line_left-layer_bot-cut_down", 109),
+    ("note_red-line_midleft-layer_bot-cut_up", 110),
     ("note_red-line_left-layer_bot-cut_up", 111),
-    ("note_red-line_left-layer_mid-cut_left", 112),
-    ("note_red-line_left-layer_bot-cut_right", 113),
-    ("note_red-line_left-layer_bot-cut_downleft", 114),
-    ("note_red-line_left-layer_top-cut_any", 115),
-    ("note_red-line_midleft-layer_bot-cut_down", 116),
-    ("note_red-line_midleft-layer_bot-cut_down", 117),
-    ("note_red-line_midleft-layer_bot-cut_down", 118),
+    ("note_red-line_midleft-layer_mid-cut_left", 112),
+    ("note_red-line_left-layer_mid-cut_left", 113),
+    ("note_red-line_right-layer_bot-cut_right", 114),
+    ("note_red-line_right-layer_mid-cut_right", 115),
+    ("note_red-line_midleft-layer_top-cut_any", 116),
+    ("note_red-line_left-layer_top-cut_any", 117),
+    ("note_red-line_midright-layer_mid-any", 118),
+    ("note_red-line_midright-layer_bot-any", 119),
     
     ("note_blue-line_midright-layer_bot-cut_down", 96),
-    ("note_blue-line_midright-layer_bot-cut_up", 97),
-    ("note_blue-line_right-layer_bot-cut_down", 98),
+    ("note_blue-line_right-layer_bot-cut_down", 97),
+    ("note_blue-line_midright-layer_bot-cut_up", 98),
     ("note_blue-line_right-layer_bot-cut_up", 99),
-    ("note_blue-line_right-layer_bot-cut_left", 100),
+    ("note_blue-line_midright-layer_mid-cut_right", 100),
     ("note_blue-line_right-layer_mid-cut_right", 101),
-    ("note_blue-line_right-layer_bot-cut_downright", 102),
-    ("note_blue-line_right-layer_top-cut_any", 103),
-    ("note_blue-line_midright-layer_bot-cut_down", 104),
-    ("note_blue-line_midright-layer_bot-cut_down", 105),
-    ("note_blue-line_midright-layer_bot-cut_down", 106)
+    ("note_blue-line_left-layer_bot-cut_left", 102),
+    ("note_blue-line_left-layer_mid-cut_left", 103),
+    ("note_blue-line_midright-layer_top-cut_any", 104),
+    ("note_blue-line_right-layer_top-cut_any", 105),
+    ("note_blue-line_midleft-layer_mid-cut_any", 106),
+    ("note_blue-line_midleft-layer_bot-cut_any", 107)
 ]
 
 event_favorites = [
-    #config favorites here: default C7-A#7 (96-106) for blue and C8-A#8 (108-118) for red)
+    #config favorites here: default C7-B7 (96-107) for blue and C8-B8 (108-119) for red)
     ("laser_laserleft-red_redon", 108),
     ("laser_laserright-red_redon", 109),
     ("speed_speedlaserleft-speed_speed1", 110),
     ("speed_speedlaserright-speed_speed1", 111),
-    ("ring_ringrotation-off_off", 112),
-    ("laser_laserbotside-red_redon", 113),
-    ("laser_laserbotside-red_redflashfade", 114),
-    ("laser_laserbacktop-red_redon", 115),
-    ("laser_laserbacktop-red_redflashfade", 116),
-    ("track_trackringneons-red_redon", 117),
-    ("track_trackringneons-red_flashfade", 118),
+    ("laser_laserbotside-red_redon", 112),
+    ("laser_laserbotside-red_redflashfade", 113),
+    ("laser_laserbacktop-red_redon", 114),
+    ("laser_laserbacktop-red_redflashfade", 115),
+    ("track_trackringneons-red_redon", 116),
+    ("track_trackringneons-red_flashfade", 117),
+    ("ring_ringrotation-off_off", 118),
+    ("ring_smallringrotation-off_off", 119),
     
     ("laser_laserleft-blue_blueon", 96),
     ("laser_laserright-blue_blueon", 97),
     ("speed_speedlaserleft-speed_speed1", 98),
     ("speed_speedlaserright-speed_speed1", 99),
-    ("ring_smallringrotation-off_off", 100),
-    ("laser_laserbotside-blue_blueon", 101),
-    ("laser_laserbotside-blue_blueflashfade", 102),
-    ("laser_laserbacktop-blue_blueon", 103),
-    ("laser_laserbacktop-blue_blueflashfade", 104),
-    ("track_trackringneons-blue_blueon", 105),
-    ("track_trackringneons-blue_blueflashfade", 106)
+    ("laser_laserbotside-blue_blueon", 100),
+    ("laser_laserbotside-blue_blueflashfade", 101),
+    ("laser_laserbacktop-blue_blueon", 102),
+    ("laser_laserbacktop-blue_blueflashfade", 103),
+    ("track_trackringneons-blue_blueon", 104),
+    ("track_trackringneons-blue_blueflashfade", 105),
+    ("ring_ringrotation-off_off", 106),
+    ("ring_smallringrotation-off_off", 107)
 ]
 
 
