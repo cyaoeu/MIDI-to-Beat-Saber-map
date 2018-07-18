@@ -20,15 +20,18 @@ class MIDIbeat:
         e1.pack()
         e1.focus_set()
 
-        master.bind('<Return>', self.notenamesexport)
+        master.bind('<Return>', self.CreateReaperNoteNamesFile)
         master.bind('<Escape>', self.close)
 
         self.button = tk.Button(master, text='MIDI to .json')
         self.button.bind('<Button-1>', self.execute)
-        self.button2 = tk.Button(master, text='Note names export')
-        self.button2.bind('<Button-1>', self.notenamesexport)
+        self.button2 = tk.Button(master, text='Create Reaper note names file')
+        self.button2.bind('<Button-1>', self.CreateReaperNoteNamesFile)
+        self.button3 = tk.Button(master, text='Create visualization effect favorites file')
+        self.button3.bind('<Button-1>', self.CreateVisualizationFavoritesFile)
         self.button.pack()
         self.button2.pack()
+        self.button3.pack()
     def close(self, event):
         self.master.withdraw() # if you want to bring it back
         sys.exit() # if you want to exit the entire thing
@@ -45,8 +48,12 @@ class MIDIbeat:
     def execute(self, event):
         self.MidiReader()
 
-    def notenamesexport(self, event):
+    def CreateReaperNoteNamesFile(self, event):
         uf.CreateReaperNotenamesFile()
+
+    def CreateVisualizationFavoritesFile(self, event):
+        uf.CreateVisualizationFavoritesFile()
+
     #UI code end
    
 

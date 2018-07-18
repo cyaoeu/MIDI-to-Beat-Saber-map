@@ -17,8 +17,8 @@ note_favorites = [
     ("note_red-line_right-layer_mid-cut_right", 115),
     ("note_red-line_midleft-layer_top-cut_any", 116),
     ("note_red-line_left-layer_top-cut_any", 117),
-    ("note_red-line_midright-layer_mid-any", 118),
-    ("note_red-line_midright-layer_bot-any", 119),
+    ("note_red-line_midright-layer_mid-cut_any", 118),
+    ("note_red-line_midright-layer_bot-cut_any", 119),
     
     ("note_blue-line_midright-layer_bot-cut_down", 96),
     ("note_blue-line_right-layer_bot-cut_down", 97),

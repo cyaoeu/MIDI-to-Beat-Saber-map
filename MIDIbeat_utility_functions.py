@@ -10,6 +10,7 @@ from collections import Counter
 import operator
 import glob
 
+
 def RenderNoteWavs(): #create samples from individual .wavs for preview purposes
     debugprint = []
     for note in s.notes:
@@ -119,6 +120,87 @@ def CreateReaperNotenamesFile():
         for line in eventkeylist:
             file.write(line + "\n")
 
+def CreateVisualizationFavoritesFile(): # crappy setup but it works for now
+    favorite_notelist = s.note_favorites
+    output = []
+    blue_num = []
+    blue_n_pointer = "200"
+    blue_n = []
+    blue_saber_start = "96"
+    blue_saber_end = "107"
+    blue_x_note_pointer = "1200"
+    blue_x_note = []
+    blue_y_note_pointer = "1500"
+    blue_y_note = []
+    blue_cut_direction_pointer = "1700"
+    blue_cut_direction = []
+
+    red_num = []
+    red_n_pointer = "700"
+    red_n = []
+    red_saber_start = "108"
+    red_saber_end = "118"
+    red_x_note_pointer = "2200"
+    red_x_note = []
+    red_y_note_pointer = "2500"
+    red_y_note = []
+    red_cut_direction_pointer = "2700"
+    red_cut_direction = []
+    for thing in favorite_notelist:
+        num = thing[1]
+        list1 = thing[0].split("-")[0]
+        list2 = thing[0].split("-")[1]
+        list3 = thing[0].split("-")[2]
+        list4 = thing[0].split("-")[3]
+        if list1 == "note_blue":
+            blue_num.append(num)
+            blue_n.append(list1)
+            blue_x_note.append(list2)
+            blue_y_note.append(list3)
+            blue_cut_direction.append(list4)
+        elif list1 == "note_red":
+            red_num.append(num)
+            red_n.append(list1)
+            red_x_note.append(list2)
+            red_y_note.append(list3)
+            red_cut_direction.append(list4)
+
+    output.append("blue_n = " + blue_n_pointer + ";")
+    output.append("blue_saber_start = " + blue_saber_start + ";") 
+    output.append("blue_saber_end = " + blue_saber_end + ";") 
+    output.append("blue_x_note = " + blue_x_note_pointer + ";") 
+    output.append("blue_y_note = " + blue_y_note_pointer + ";") 
+    output.append("blue_cut_direction = " + blue_cut_direction_pointer + ";")   
+    
+    for i, thing in enumerate(blue_n):
+        output.append("blue_n[" + str(i) + "] = " + str(blue_num[i]) + ";")
+        output.append("blue_x_note[" + str(i) + "] = " + blue_x_note[i] + ";")
+        output.append("blue_y_note[" + str(i) + "] = " + blue_y_note[i] + ";")
+        output.append("blue_cut_direction[" + str(i) + "] = " + blue_cut_direction[i] + ";")
+    
+    output.append("red_n = " + red_n_pointer + ";")
+    output.append("red_saber_start = " + red_saber_start + ";") 
+    output.append("red_saber_end = " + red_saber_end + ";") 
+    output.append("red_x_note = " + red_x_note_pointer + ";") 
+    output.append("red_y_note = " + red_y_note_pointer + ";") 
+    output.append("red_cut_direction = " + red_cut_direction_pointer + ";")   
+
+    for i, thing in enumerate(red_n):
+        output.append("red_n[" + str(i) + "] = " + str(red_num[i]) + ";")
+        output.append("red_x_note[" + str(i) + "] = " + red_x_note[i] + ";")
+        output.append("red_y_note[" + str(i) + "] = " + red_y_note[i] + ";")
+        output.append("red_cut_direction[" + str(i) + "] = " + red_cut_direction[i] + ";")
+
+    for line in output:
+        print(line)
+
+    with open(s.path + "visualization_effect_favorite_notes.txt", "w") as file:
+        for line in output:
+            file.write(line + "\n")
+
+    
+
+
 
 def ParseJSON():
     mode = sys.argv[1]
@@ -172,14 +254,14 @@ def ParseJSON():
             for key, value in resultlist:
                 lighttype = [item[0] for item in s.lighting_types if key[0] == item[1]]
                 lighttype_print = lighttype[0].split("_")[1].capitalize()
-                lightvalue = [item[0] for item in s.lighting_values if key[1] == item[1]]
+                lightvalue = [item[0] for item in s.lighting_lightvalues if key[1] == item[1]]
                 lightvalue_print = lightvalue[0].split("_")[1].capitalize()
                 print("{:>2}{:<4}".format(str(value), "x") + "{:<1}{:^5.1%}{:>1}".format("(", value/max, ")") + "{:>15} {:>12}".format(lighttype_print, lightvalue_print))
                 filelist += lighttype + list("-") + lightvalue + list("                " + str(value) + "x (" + "{:^5.1%}".format(value/max)) + list("\n")
             with open(file.rsplit(".", 1)[0] + "_events.txt", 'w') as txtfile:
                 for thing in filelist:
                     txtfile.write(str(thing))
-                   
+                
 
 
 
@@ -208,7 +290,7 @@ def ParseJSON():
             with open(file.rsplit(".", 1)[0] + "_obstacles.txt", 'w') as txtfile:
                 for thing in filelist:
                     txtfile.write(str(thing))
-                   
+                
 
         
     

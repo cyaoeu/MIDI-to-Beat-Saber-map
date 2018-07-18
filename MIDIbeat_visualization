@@ -37,117 +37,114 @@ line_right = 300;
 
 
 //FAVORITES HERE
-
 blue_n = 200;
-blue_n[0] = 96;
-blue_n[1] = 97;
-blue_n[2] = 98;
-blue_n[3] = 99;
-blue_n[4] = 100;
-blue_n[5] = 101;
-blue_n[6] = 102;
-blue_n[7] = 103;
-blue_n[8] = 104;
-blue_n[9] = 105;
-blue_n[10] = 106;
-
 blue_saber_start = 96;
-blue_saber_end = 106;
- 
+blue_saber_end = 107;
 blue_x_note = 1200;
-blue_x_note[0] = line_midright;
-blue_x_note[1] = line_midright;
-blue_x_note[2] = line_right;
-blue_x_note[3] = line_right;
-blue_x_note[4] = line_left;
-blue_x_note[5] = line_right;
-blue_x_note[6] = line_right;
-blue_x_note[7] = line_right;
-blue_x_note[8] = line_midright;
-blue_x_note[9] = line_midright;
-blue_x_note[10] = line_midright;
-
 blue_y_note = 1500;
-blue_y_note[0] = layer_bot;
-blue_y_note[1] = layer_bot;
-blue_y_note[2] = layer_bot;
-blue_y_note[3] = layer_bot;
-blue_y_note[4] = layer_bot;
-blue_y_note[5] = layer_mid;
-blue_y_note[6] = layer_bot;
-blue_y_note[7] = layer_top;
-blue_y_note[8] = layer_bot;
-blue_y_note[9] = layer_bot;
-blue_y_note[10] = layer_bot;
-
 blue_cut_direction = 1700;
+blue_n[0] = 96;
+blue_x_note[0] = line_midright;
+blue_y_note[0] = layer_bot;
 blue_cut_direction[0] = cut_down;
-blue_cut_direction[1] = cut_up;
-blue_cut_direction[2] = cut_down;
+blue_n[1] = 97;
+blue_x_note[1] = line_right;
+blue_y_note[1] = layer_bot;
+blue_cut_direction[1] = cut_down;
+blue_n[2] = 98;
+blue_x_note[2] = line_midright;
+blue_y_note[2] = layer_bot;
+blue_cut_direction[2] = cut_up;
+blue_n[3] = 99;
+blue_x_note[3] = line_right;
+blue_y_note[3] = layer_bot;
 blue_cut_direction[3] = cut_up;
+blue_n[4] = 100;
+blue_x_note[4] = line_midright;
+blue_y_note[4] = layer_mid;
 blue_cut_direction[4] = cut_right;
-blue_cut_direction[5] = cut_left;
-blue_cut_direction[6] = cut_downright;
-blue_cut_direction[7] = cut_any;
-blue_cut_direction[8] = cut_down;
-blue_cut_direction[9] = cut_down;
-blue_cut_direction[10] = cut_down;
-
+blue_n[5] = 101;
+blue_x_note[5] = line_right;
+blue_y_note[5] = layer_mid;
+blue_cut_direction[5] = cut_right;
+blue_n[6] = 102;
+blue_x_note[6] = line_left;
+blue_y_note[6] = layer_bot;
+blue_cut_direction[6] = cut_left;
+blue_n[7] = 103;
+blue_x_note[7] = line_left;
+blue_y_note[7] = layer_mid;
+blue_cut_direction[7] = cut_left;
+blue_n[8] = 104;
+blue_x_note[8] = line_midright;
+blue_y_note[8] = layer_top;
+blue_cut_direction[8] = cut_any;
+blue_n[9] = 105;
+blue_x_note[9] = line_right;
+blue_y_note[9] = layer_top;
+blue_cut_direction[9] = cut_any;
+blue_n[10] = 106;
+blue_x_note[10] = line_midleft;
+blue_y_note[10] = layer_mid;
+blue_cut_direction[10] = cut_any;
+blue_n[11] = 107;
+blue_x_note[11] = line_midleft;
+blue_y_note[11] = layer_bot;
+blue_cut_direction[11] = cut_any;
 red_n = 700;
-red_n[0] = 108;
-red_n[1] = 109;
-red_n[2] = 110;
-red_n[3] = 111;
-red_n[4] = 112;
-red_n[5] = 113;
-red_n[6] = 114;
-red_n[7] = 115;
-red_n[8] = 116;
-red_n[9] = 117;
-red_n[10] = 118;
-
 red_saber_start = 108;
 red_saber_end = 118;
-
 red_x_note = 2200;
-red_x_note[0] = line_midleft;
-red_x_note[1] = line_midleft;
-red_x_note[2] = line_left;
-red_x_note[3] = line_left;
-red_x_note[4] = line_left;
-red_x_note[5] = line_right;
-red_x_note[6] = line_left;
-red_x_note[7] = line_left;
-red_x_note[8] = line_midleft;
-red_x_note[9] = line_midleft;
-red_x_note[10] = line_midleft;
-
 red_y_note = 2500;
-red_y_note[0] = layer_bot;
-red_y_note[1] = layer_bot;
-red_y_note[2] = layer_bot;
-red_y_note[3] = layer_bot;
-red_y_note[4] = layer_mid;
-red_y_note[5] = layer_bot;
-red_y_note[6] = layer_bot;
-red_y_note[7] = layer_top;
-red_y_note[8] = layer_bot;
-red_y_note[9] = layer_bot;
-red_y_note[10] = layer_bot;
-
-
 red_cut_direction = 2700;
+red_n[0] = 108;
+red_x_note[0] = line_midleft;
+red_y_note[0] = layer_bot;
 red_cut_direction[0] = cut_down;
-red_cut_direction[1] = cut_up;
-red_cut_direction[2] = cut_down;
+red_n[1] = 109;
+red_x_note[1] = line_left;
+red_y_note[1] = layer_bot;
+red_cut_direction[1] = cut_down;
+red_n[2] = 110;
+red_x_note[2] = line_midleft;
+red_y_note[2] = layer_bot;
+red_cut_direction[2] = cut_up;
+red_n[3] = 111;
+red_x_note[3] = line_left;
+red_y_note[3] = layer_bot;
 red_cut_direction[3] = cut_up;
-red_cut_direction[4] = cut_right;
+red_n[4] = 112;
+red_x_note[4] = line_midleft;
+red_y_note[4] = layer_mid;
+red_cut_direction[4] = cut_left;
+red_n[5] = 113;
+red_x_note[5] = line_left;
+red_y_note[5] = layer_mid;
 red_cut_direction[5] = cut_left;
-red_cut_direction[6] = cut_downleft;
-red_cut_direction[7] = cut_any;
-red_cut_direction[8] = cut_down;
-red_cut_direction[9] = cut_down;
-red_cut_direction[10] = cut_down;
+red_n[6] = 114;
+red_x_note[6] = line_right;
+red_y_note[6] = layer_bot;
+red_cut_direction[6] = cut_right;
+red_n[7] = 115;
+red_x_note[7] = line_right;
+red_y_note[7] = layer_mid;
+red_cut_direction[7] = cut_right;
+red_n[8] = 116;
+red_x_note[8] = line_midleft;
+red_y_note[8] = layer_top;
+red_cut_direction[8] = cut_any;
+red_n[9] = 117;
+red_x_note[9] = line_left;
+red_y_note[9] = layer_top;
+red_cut_direction[9] = cut_any;
+red_n[10] = 118;
+red_x_note[10] = line_midright;
+red_y_note[10] = layer_mid;
+red_cut_direction[10] = cut_any;
+red_n[11] = 119;
+red_x_note[11] = line_midright;
+red_y_note[11] = layer_bot;
+red_cut_direction[11] = cut_any;
 
 //FAVORITES END
 
@@ -634,4 +631,13 @@ msg2 != 0 ? (
 @sample
 spl0=spl0;
 spl1=spl1;
+
+/////////////////////////////////////////////////////////////////
+// Copyright (c) - 2014 - Olivier Belanger                     //
+// Permission to use, copy, modify, and/or distribute this     //
+// software for any purpose with or without fee is hereby      //
+// granted, provided that the above copyright notice and this  //
+// permission notice appear in all copies. CookDSP IS PROVIDED //
+// "AS IS", WITHOUT WARRANTY OF ANY KIND FROM THE AUTHOR.      //
+/////////////////////////////////////////////////////////////////
 
