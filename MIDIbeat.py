@@ -89,13 +89,15 @@ class MIDIbeat:
                         
                         elif note in range(96, 120):
                             midinote = [item[0] for item in s.note_favorites if msg.note == item[1]]
+                            print(midinote)
+                            print(msg.channel)
                             if msg.channel == 9: #really channel 10 (there is no midi channel 0) TODO fix
                                 toJSONnote = midinote[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                                 toJSONtime = currentbeat                          
                                 beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime, False))                                
 
-                            if msg.channel == 10: #really channel 11 (there is no midi channel 0) TODO fix
+                            elif msg.channel == 10: #really channel 11 (there is no midi channel 0) TODO fix
                                 toJSONnote = midinote[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug   
                                 toJSONtime = currentbeat                          
@@ -122,15 +124,21 @@ class MIDIbeat:
                         currenttick += msg.time
                         currentbeat = currenttick / ticks_per_beat
                         note = msg.note
-                        if note in range(89, 93):
+                        if note in range(89, 94):
                             obstacleduration = currentbeat - obstacle_ontime
                             beatmap["_obstacles"].append(self.ObstacleToJSON(toJSONobstacle, obstacle_ontime, obstacleduration))
                             midinote = [item[0] for item in s.obstacle_tuple if msg.note == item[1]]
                             print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                         else:
-                            midinote = [item[0] for item in s.input_tuple if msg.note == item[1]]
-                            midichannel = [item[0] for item in s.cut_directions if msg.channel == item[1]]
-                            print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug                   
+                            if msg.channel == 9:
+                                midinote = [item[0] for item in s.note_favorites if msg.note == item[1]]
+                                print("NOTEOFF: " + "#" + str(note) + " ch:" + " (" + midinote[0] + ")") #debug  
+                            elif msg.channel == 10:
+                                print("NOTEOFF: " + "#" + str(note) + " ch:" + " (MINE)") #debug  
+                            else:
+                                midinote = [item[0] for item in s.input_tuple if msg.note == item[1]]
+                                midichannel = [item[0] for item in s.cut_directions if msg.channel == item[1]]
+                                print("NOTEOFF: " + "#" + str(note) + " ch:" + str(midichannel) + " (" + midinote[0] + ")") #debug                   
 
             elif track.name == "Events":
                 print("events here")
@@ -151,14 +159,16 @@ class MIDIbeat:
                         currenttick += msg.time
                         currentbeat = currenttick / ticks_per_beat
                         toJSONtime = currentbeat
-                        if note in range(96, 119):
+                        if note in range(96, 120):
                             midinote = [item[0] for item in s.event_favorites if msg.note == item[1]]
+                            print(midinote)
                             if msg.channel == 9:
                                 toJSONevent = midinote[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                                 beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                             else:
-                                if midinote[1] == 12 or midinote[1] == 13: 
+                                print(midinote[0].split("-")[0])
+                                if midinote[0].split("-")[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
                                     midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
                                 else:
                                     midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
@@ -167,7 +177,7 @@ class MIDIbeat:
                                 beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                         else:                      
                             midinote = [item[0] for item in s.lighting_tuple if msg.note == item[1]]
-                            if midinote[1] == 12 or midinote[1] == 13: 
+                            if midinote[0].split("-")[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
                                 midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
                             else:
                                 midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
@@ -186,7 +196,7 @@ class MIDIbeat:
                                 toJSONnote = midinote[0]
                                 print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                             else:
-                                if midinote[1] == 12 or midinote[1] == 13: 
+                                if midinote[0].split("-")[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
                                     midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
                                 else:
                                     midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
@@ -194,7 +204,7 @@ class MIDIbeat:
                                 print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
                         else:
                             midinote = [item[0] for item in s.lighting_tuple if msg.note == item[1]]
-                            if midinote[1] == 12 or midinote[1] == 13: 
+                            if midinote[0].split("-")[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
                                 midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
                             else:
                                 midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]

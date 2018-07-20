@@ -36,6 +36,9 @@ line_right = 300;
 
 
 
+//flash - set to 0 to disable note flash
+flash = 1;
+
 //FAVORITES HERE
 blue_n = 200;
 blue_saber_start = 96;
@@ -93,7 +96,7 @@ blue_y_note[11] = layer_bot;
 blue_cut_direction[11] = cut_any;
 red_n = 700;
 red_saber_start = 108;
-red_saber_end = 118;
+red_saber_end = 119;
 red_x_note = 2200;
 red_y_note = 2500;
 red_cut_direction = 2700;
@@ -364,11 +367,9 @@ function note(color, inputnote, direction)
       direction == 7 ? gfx_blit(2, 1, 2.3561944902) :
       direction == 8 ? gfx_blit(3, 1, 0);
       
-      /*
-      loop(10,
-      gfx_muladdrect(blue_x_final, 70 + blue_y_final, 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
-      );
-      */
+      
+      
+      
       );
     );
 
@@ -407,11 +408,12 @@ while (n.notein()) (
         note[i][0] = p.pitch;
         note[i][1] = p.channel;
         note[i][2] = p.velocity;
+        note[i][2] > 0 ? (gfx_r = 1; gfx_g = 1; gfx_b = 1);
         
 
         loop(8,   
           u = 0; 
-               loop(11,
+               loop(12,
                 confirmnote(note[i][0], blue_saber_start, blue_saber_end) == 1 ? (
                  note[i][0] == blue_n[u] ? (
         
@@ -420,6 +422,7 @@ while (n.notein()) (
                    note[i][5] = blue_cut_direction[u];
                    
                    note[i][2] == 0 ? note[i][0] = -1;
+                   
         
                  );
                  u+= 1;
@@ -427,7 +430,7 @@ while (n.notein()) (
               );
                  
             v = 0;
-            loop(11,
+            loop(12,
             confirmnote(note[i][0], red_saber_start, red_saber_end) == 1 ? (
               note[i][0] == red_n[v] ? (        
                 note[i][3] = red_x_note[v];
@@ -478,7 +481,6 @@ i += 1;
 
 
 @gfx
-gfx_r = 1; gfx_g = 1; gfx_b = 1;
 gfx_x = 100;
 gfx_y = 50; 
 gfx_drawstr(stringdraw, 2);
@@ -533,6 +535,7 @@ msg2 != 0 ? (
   
   
   
+  
   z = 0;        
   loop(8,
     qfx_note[z][0] = note[z][0]; 
@@ -552,7 +555,7 @@ msg2 != 0 ? (
   //numberdraw[q2] = gfx_note[q2][1];
   
   //velocity
-  //numberdraw[q2] = gfx_note[q2][2];
+  numberdraw[q2] = gfx_note[q2][2];
   
   //x
   //numberdraw[q2] = gfx_note[q2][3];
@@ -561,7 +564,6 @@ msg2 != 0 ? (
   //numberdraw[q2] = gfx_note[q2][4];
     
     confirmnote(gfx_note[q2][0], blue_saber_start, blue_saber_end) == 1 ? (
-  
       gfx_note[q2][1] == 10 ? (
         note("mine_blue", gfx_note[q2], 0);
           ) :
@@ -573,6 +575,14 @@ msg2 != 0 ? (
       gfx_note[q2][1] <= 8 ? (
         note("blue", gfx_note[q2], gfx_note[q2][1]);
           );
+    flash == 1 ? (
+      
+      loop(12,
+        gfx_muladdrect(gfx_note[q2][3], 70 + gfx_note[q2][4], 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+      );
+      
+
+      );
         );
     q2 += 1; 
     );
@@ -594,9 +604,23 @@ msg2 != 0 ? (
       gfx_note[q3][1] <= 8 ? (  
         note("red", gfx_note[q3], gfx_note[q3][1]);
         );  
+        flash == 1 ? (
+    loop(12,
+      gfx_muladdrect(gfx_note[q3][3], 70 + gfx_note[q3][4], 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+    );
+    
+
+            );
       );
     q3 += 1;
     ); 
+  q6 = 0;
+  loop(8, 
+    confirmnote(gfx_note[q6][0], obstacle_start, obstacle_end) == 1 ? (
+      gfx_note[q6][2] > 0 ? wall(gfx_note[q6], "on");
+      ;
+    );
+    q6 += 1;
   
   q4 = 0;
   loop(8,
@@ -616,17 +640,14 @@ msg2 != 0 ? (
     q5 += 1;
   
     );
-  q6 = 0;
-  loop(8, 
-    confirmnote(gfx_note[q6][0], obstacle_start, obstacle_end) == 1 ? (
-      gfx_note[q6][2] > 0 ? wall(gfx_note[q6], "on");
-      ;
-    );
-    q6 += 1;
+
   
     );
     
+    
     );
+    
+
    
 @sample
 spl0=spl0;

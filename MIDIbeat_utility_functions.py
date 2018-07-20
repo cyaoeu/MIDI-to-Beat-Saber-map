@@ -139,7 +139,7 @@ def CreateVisualizationFavoritesFile(): # crappy setup but it works for now
     red_n_pointer = "700"
     red_n = []
     red_saber_start = "108"
-    red_saber_end = "118"
+    red_saber_end = "119"
     red_x_note_pointer = "2200"
     red_x_note = []
     red_y_note_pointer = "2500"
