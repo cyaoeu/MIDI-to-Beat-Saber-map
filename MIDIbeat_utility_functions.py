@@ -77,31 +77,87 @@ def CreateReaperNotenamesFile():
     favorite_notelist = s.note_favorites
     eventlist = s.lighting_tuple
     favorite_eventlist = s.event_favorites
-    for thing in notelist:
-        num = thing[1]
-        list1 = thing[0].split("-")[0]
-        list2 = thing[0].split("-")[1]
-        if thing[0].startswith("obstacle"):
-            print(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize())
-            notekeylist.append(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize())       
-        else:
-            list3 = thing[0].split("-")[2]
-            print(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize())
-            notekeylist.append(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize())
+
     for thing in favorite_notelist:
         num = thing[1]
         list1 = thing[0].split("-")[0]
         list2 = thing[0].split("-")[1]
         list3 = thing[0].split("-")[2]
         list4 = thing[0].split("-")[3]
-        print(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize() + " " + list4.split("_")[1].capitalize())
-        notekeylist.append(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize() + " " + list4.split("_")[1].capitalize())
+        print(str(num) + " " + "10 " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize() + " " + list4.split("_")[1].capitalize())
+        notekeylist.append(str(num) + " " + "10 " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize() + " " + list4.split("_")[1].capitalize())
 
-    for thing in eventlist:
+    for thing in notelist:
         num = thing[1]
         list1 = thing[0].split("-")[0]
-        print(str(num) + " " + list1.split("_")[1].capitalize())
-        eventkeylist.append(str(num) + " " + list1.split("_")[1].capitalize())  
+        list2 = thing[0].split("-")[1]
+        if thing[0].startswith("obstacle"):
+            print(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize())
+            notekeylist.append(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize())   
+
+    with open(s.path + "reaper_keys_notes_10.txt", "w") as file: #favorites
+        file.write("//MIDI to Beat Saber map Reaper keys (Notes)\n")
+        for line in notekeylist:
+            file.write(line + "\n")
+
+    notechannels = []
+    notechannels.append([]) # up
+    notechannels.append([]) # down
+    notechannels.append([]) # left
+    notechannels.append([]) # right
+    notechannels.append([]) # upleft
+    notechannels.append([]) # upright
+    notechannels.append([]) # downleft
+    notechannels.append([]) # downright
+    notechannels.append([]) #any
+    
+    
+    
+    mines = [] #11
+
+    for thing in favorite_notelist:
+        num = thing[1]
+        list1 = thing[0].split("-")[0]
+        list2 = thing[0].split("-")[1]
+        list3 = thing[0].split("-")[2]
+        cutdirection = s.cut_directions
+        for aoeu in cutdirection:
+            print(aoeu)
+        for i, cut in enumerate(cutdirection):
+            print(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize() + " " + cut[0].split("_")[1].capitalize())
+            notechannels[i].append(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize() + " " + cut[0].split("_")[1].capitalize())
+
+    cutdirection = s.cut_directions
+    for i, cut in enumerate(cutdirection):
+        for obstacle in notelist:
+            num = obstacle[1]
+            obstacle1 = obstacle[0].split("-")[0]
+            obstacle2 = obstacle[0].split("-")[1]
+            if obstacle[0].startswith("obstacle"):
+                print(str(num) + " " + obstacle1.split("_")[1].capitalize() + " " + obstacle2.split("_")[1].capitalize())
+                notechannels[i].append(str(num) + " " + obstacle1.split("_")[1].capitalize() + " " + obstacle2.split("_")[1].capitalize())   
+
+
+    for thing in favorite_notelist:
+        num = thing[1]
+        list1 = "mine"
+        list2 = thing[0].split("-")[1]
+        list3 = thing[0].split("-")[2]
+        print(str(num) + " " + list1.capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize())
+        mines.append(str(num) + " " + list1.capitalize() + " " + list2.split("_")[1].capitalize() + " " + list3.split("_")[1].capitalize())
+
+
+    for i, channel in enumerate(notechannels):
+        with open(s.path + "reaper_keys_notes_" + str(i+1) + ".txt", "w") as file:
+            file.write("//MIDI to Beat Saber map Reaper keys (Notes)\n")
+            for line in channel:
+                file.write(line + "\n")
+
+    with open(s.path + "reaper_keys_notes_11.txt", "w") as file:
+        file.write("//MIDI to Beat Saber map Reaper keys (Notes)\n")
+        for line in mines:
+            file.write(line + "\n")
+
     for thing in favorite_eventlist:
         num = thing[1]
         list1 = thing[0].split("-")[0]
@@ -109,16 +165,60 @@ def CreateReaperNotenamesFile():
         print(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize())
         eventkeylist.append(str(num) + " " + list1.split("_")[1].capitalize() + " " + list2.split("_")[1].capitalize())  
     
-
-    with open(s.path + "reaper_keys_notes.txt", "w") as file:
-        file.write("//MIDI to Beat Saber map Reaper keys (Notes)\n")
-        for line in notekeylist:
-            file.write(line + "\n")
-
-    with open(s.path + "reaper_keys_events.txt", "w") as file:
+    with open(s.path + "reaper_keys_events_10.txt", "w") as file:
         file.write("//MIDI to Beat Saber map Reaper keys (Events)\n")
         for line in eventkeylist:
             file.write(line + "\n")
+
+    lighting_values = []
+    lighting_values.append([]) # off
+    lighting_values.append([]) # blue on
+    lighting_values.append([]) # blue flash stay
+    lighting_values.append([]) # blue flash fade
+    lighting_values.append([]) # none
+    lighting_values.append([]) # red on
+    lighting_values.append([]) # red flash stay
+    lighting_values.append([]) # red flash fade
+
+    lighting_rotation_values = []
+    lighting_rotation_values.append([]) # stop
+    lighting_rotation_values.append([]) # speed 1
+    lighting_rotation_values.append([]) # speed 2
+    lighting_rotation_values.append([]) # speed 3
+    lighting_rotation_values.append([]) # speed 4
+    lighting_rotation_values.append([]) # speed 5 
+    lighting_rotation_values.append([]) # speed 6
+    lighting_rotation_values.append([]) # speed 7
+    lighting_rotation_values.append([]) # speed 8
+
+    lightvalues = s.lighting_lightvalues
+    rotvalues = s.lighting_rotationvalues
+    for thing in favorite_eventlist:
+        num = thing[1]
+        list1 = thing[0].split("-")[0]
+        list2 = thing[0].split("-")[1]
+        if list1 in ["speed_speedlaserleft", "speed_speedlaserright"]:
+            for i, rotvalue in enumerate(rotvalues):
+                print(str(num) + " " + list1.split("_")[1].capitalize() + " " + rotvalue[0].split("_")[1].capitalize())
+                lighting_rotation_values[i].append(str(num) + " " + list1.split("_")[1].capitalize() + " " + rotvalue[0].split("_")[1].capitalize())  
+        else:
+            for i, lightvalue in enumerate(lightvalues):
+                print(str(num) + " " + list1.split("_")[1].capitalize() + " " + lightvalue[0].split("_")[1].capitalize())
+                lighting_values[i].append(str(num) + " " + list1.split("_")[1].capitalize() + " " + lightvalue[0].split("_")[1].capitalize())  
+                
+    for i, channel in enumerate(lighting_rotation_values):
+        with open(s.path + "reaper_keys_events_" + str(i+1) + ".txt", "w") as file:
+            file.write("//MIDI to Beat Saber map Reaper keys (Events)\n")
+            for line in channel:
+                file.write(line + "\n")
+
+    for i, channel in enumerate(lighting_values):
+        with open(s.path + "reaper_keys_events_" + str(i+1) + ".txt", "a") as file:
+            for line in channel:
+                file.write(line + "\n")
+
+    
+
 
 def CreateVisualizationFavoritesFile(): # crappy setup but it works for now
     favorite_notelist = s.note_favorites

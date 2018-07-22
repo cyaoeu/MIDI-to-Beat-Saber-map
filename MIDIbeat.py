@@ -172,23 +172,13 @@ class MIDIbeat:
                                 beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                             else:
                                 print(midinote[0].split("-")[0])
-                                if midinote[0].split("-")[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
+                                if midinote[0].split("-")[0] in ["speed_speedlaserleft", "speed_speedlaserright"]:
                                     midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
                                 else:
                                     midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
                                 toJSONevent = midinote[0] + "-" + midichannel[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
                                 beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
-                        else:                      
-                            midinote = [item[0] for item in s.lighting_tuple if msg.note == item[1]]
-                            if midinote[0].split("-")[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
-                                midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
-                            else:
-                                midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
-                            toJSONevent = midinote[0] + "-" + midichannel[0]                        
-                            print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + "-" + midichannel[0] + ")") #debug
-                            #print("#" + str(note) + " ch:" + str(channel))                 
-                            beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                       
                     elif msg.type == "note_off" or msg.type == "note_on" and msg.velocity == 0:
                         if note in range(96, 120):
@@ -200,7 +190,7 @@ class MIDIbeat:
                                 toJSONnote = midinote[0]
                                 print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                             else:
-                                if midinote[0].split("-")[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
+                                if midinote[0].split("-")[0] in ["speed_speedlaserleft", "speed_speedlaserright"]:
                                     midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
                                 else:
                                     midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
@@ -208,7 +198,7 @@ class MIDIbeat:
                                 print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
                         else:
                             midinote = [item[0] for item in s.lighting_tuple if msg.note == item[1]]
-                            if midinote[0].split("-")[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
+                            if midinote[0].split("-")[0] in ["speed_speedlaserleft", "speed_speedlaserright"]:
                                 midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
                             else:
                                 midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
@@ -344,7 +334,7 @@ class MIDIbeat:
     def JSONNoteToEvent(self, inputevent):
 
         type = [item[0] for item in s.lighting_types if inputevent["_type"] == item[1]]
-        if type[0] != ("speed_speedlaserleft" or "speed_speedlaserright"): 
+        if type[0] not in ["speed_speedlaserleft", "speed_speedlaserright"]: 
             value = [item[0] for item in s.lighting_lightvalues if inputevent["_value"] == item[1]]
         else:
             value = [item[0] for item in s.lighting_rotationvalues if inputevent["_value"] == item[1]]
@@ -357,7 +347,7 @@ class MIDIbeat:
             
             notfavoritenote = [item[1] for item in s.event_favorites if notedetails == item[0].rsplit("-", 1)[0]]
             if notfavoritenote:
-                if type[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
+                if type[0] in ["speed_speedlaserleft", "speed_speedlaserright"]: 
                     channel = [item[1] for item in s.lighting_rotationvalues if value[0] == item[0]]
                     return(notfavoritenote[0], channel[0])
                 else:

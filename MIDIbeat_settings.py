@@ -224,6 +224,9 @@ lighting_types = [
     ("laser_laserleft", 2),
     ("laser_laserright", 3),
     ("laser_laserbotside", 4),
+    ("none", 5),
+    ("none", 6),
+    ("none", 7),
     ("ring_ringrotation", 8),
     ("ring_smallringrotation", 9),
     ("speed_speedlaserleft", 12),
@@ -235,6 +238,7 @@ lighting_lightvalues = [
     ("blue_blueon", 1),
     ("blue_blueflashstay", 2),
     ("blue_blueflashfade", 3),
+    ("none_none", 4),
     ("red_redon", 5),
     ("red_redflashstay", 6),
     ("red_redflashfade", 7)
