@@ -408,7 +408,7 @@ while (n.notein()) (
         note[i][0] = p.pitch;
         note[i][1] = p.channel;
         note[i][2] = p.velocity;
-        note[i][2] > 0 ? (gfx_r = 1; gfx_g = 1; gfx_b = 1);
+        note[i][2] > 0 ? (gfx_r = 1; gfx_g = 1; gfx_b = 1;);
         
 
         loop(8,   
@@ -481,6 +481,7 @@ i += 1;
 
 
 @gfx
+gfx_mode = 1;
 gfx_x = 100;
 gfx_y = 50; 
 gfx_drawstr(stringdraw, 2);
@@ -529,7 +530,7 @@ a = 0;
 y = 50;
 x = 0;
 
-gfx_a = 1;
+//gfx_a = 0;
 
 msg2 != 0 ? (
   
@@ -578,7 +579,7 @@ msg2 != 0 ? (
     flash == 1 ? (
       
       loop(10,
-        gfx_muladdrect(gfx_note[q2][3], 70 + gfx_note[q2][4], 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+        gfx_muladdrect(gfx_note[q2][3], 70 + gfx_note[q2][4], 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 0, 0, 0, 0, 0); 
       );
       
 
@@ -606,7 +607,7 @@ msg2 != 0 ? (
         );  
         flash == 1 ? (
     loop(10,
-      gfx_muladdrect(gfx_note[q3][3], 70 + gfx_note[q3][4], 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
+      gfx_muladdrect(gfx_note[q3][3], 70 + gfx_note[q3][4], 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 0, 0, 0, 0, 0); 
     );
     
 
