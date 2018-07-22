@@ -11,6 +11,7 @@ import tkinter as tk
 class MIDIbeat:
     #UI code
     def __init__(self, master):
+
         self.master = master
         master.geometry("800x400")
         self.center(self.master)
@@ -29,9 +30,13 @@ class MIDIbeat:
         self.button2.bind('<Button-1>', self.CreateReaperNoteNamesFile)
         self.button3 = tk.Button(master, text='Create visualization effect favorites file')
         self.button3.bind('<Button-1>', self.CreateVisualizationFavoritesFile)
+        self.button4 = tk.Button(master, text='JSON to MIDI')
+        self.button4.bind('<Button-1>', self.CreateMIDIFromJSON)
         self.button.pack()
         self.button2.pack()
         self.button3.pack()
+        self.button4.pack()
+    
     def close(self, event):
         self.master.withdraw() # if you want to bring it back
         sys.exit() # if you want to exit the entire thing
@@ -46,7 +51,7 @@ class MIDIbeat:
         toplevel.geometry("%dx%d+%d+%d" % (size + (x, y)))
 
     def execute(self, event):
-        self.MidiReader()
+        self.CreateJSONFromMIDI()
 
     def CreateReaperNoteNamesFile(self, event):
         uf.CreateReaperNotenamesFile()
@@ -57,7 +62,7 @@ class MIDIbeat:
     #UI code end
    
 
-    def MidiReader(self):
+    def CreateJSONFromMIDI(self):
         beatmap = copy.deepcopy(s.map)
         currenttick = 0
         mid = mido.MidiFile(s.path + "beatsaber.mid")
@@ -89,8 +94,6 @@ class MIDIbeat:
                         
                         elif note in range(96, 120):
                             midinote = [item[0] for item in s.note_favorites if msg.note == item[1]]
-                            print(midinote)
-                            print(msg.channel)
                             if msg.channel == 9: #really channel 10 (there is no midi channel 0) TODO fix
                                 toJSONnote = midinote[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
@@ -224,7 +227,94 @@ class MIDIbeat:
         with open(s.outputpath + s.songname + "\\" + 'Expert.json', 'w') as outfile:
             json.dump(beatmap, outfile, indent=4)
             
+    def CreateMIDIFromJSON(self, event):
+        with open(s.path + "OST\\SongLevelData_Breezer_Expert-resources.assets-231-MonoBehaviour.json") as f:
+            data = json.load(f)
+            bpm = data["_beatsPerMinute"]
+            tempo = mido.bpm2tempo(bpm) 
+            mid = mido.MidiFile(type=1, ticks_per_beat=480)
+            notes_track = mido.MidiTrack()
+            mid.tracks.append(notes_track)
+            notes_track.append(mido.MetaMessage('time_signature', numerator=4, denominator=4, clocks_per_click=24, notated_32nd_notes_per_beat=8, time=0))
+            notes_track.append(mido.MetaMessage('set_tempo', tempo=tempo))
+            currenttick = 0
+            notes = []
+            obstacles = []
+            events = []
+            bps = bpm / 60
+            for note in data["_notes"]:
+                notes.append(note)
+                #print(note)
+            for obstacle in data["_obstacles"]:
+                obstacles.append(obstacle)
+            for event in data["_events"]:
+                events.append(event)
 
+            prevtime = 0
+            noteofftime = 0
+            ticks_per_beat = 480
+            #currenttick += msg.time
+            last_note = 0
+            last_channel = 0
+            multiple_notes = False
+            
+            for note in notes:
+                notetimeinticks = int(mido.second2tick(note["_time"] / bps, 480, tempo))
+                note_number, channel = self.JSONNoteToSaberSlash(note)
+                notes_track.append(mido.Message('note_on', note=note_number, channel=channel, velocity=64, time=notetimeinticks-prevtime))              
+                notes_track.append(mido.Message('note_off', note=last_note, channel=last_channel, time=0))         
+                last_note = note_number
+                last_channel = channel
+                prevtime = notetimeinticks
+
+            prevtime = 0
+            for obstacle in obstacles:
+                notetimeinticks = int(mido.second2tick(obstacle["_time"] / bps, 480, tempo))
+                obstacle_note_number = self.JSONNoteToObstacle(obstacle)
+                notes_track.append(mido.Message('note_on', note=obstacle_note_number, velocity=64, time=notetimeinticks-prevtime))              
+                notes_track.append(mido.Message('note_off', note=last_note, time=0))         
+                last_note = obstacle_note_number
+                prevtime = notetimeinticks
+
+            mid.save(s.path + 'new_song.mid')
+
+    def JSONNoteToSaberSlash(self, inputnote):
+
+        type = [item[0] for item in s.note_types if inputnote["_type"] == item[1]]
+        line = [item[0] for item in s.line_indices if inputnote["_lineIndex"] == item[1]]
+        layer = [item[0] for item in s.line_layers if inputnote["_lineLayer"] == item[1]]
+        cutdirection = [item[0] for item in s.cut_directions if inputnote["_cutDirection"] == item[1]]
+
+        notedetails =  type[0] + "-" + line[0] + "-" + layer[0] + "-" + cutdirection[0]
+        favoritenote = [item[1] for item in s.note_favorites if notedetails == item[0]]
+        #print(notedetails)
+        if type[0] == "note_mine":
+            notedetails = notedetails.split("-", 1)[1].rsplit("-", 1)[0]
+            outputnote = [item[1] for item in s.note_favorites if notedetails == item[0].split("-", 1)[1].rsplit("-", 1)[0]]
+            return(outputnote[0], 10)
+        elif not favoritenote:
+            notedetails =  type[0] + "-" + line[0] + "-" + layer[0]
+            notfavoritenote = [item[1] for item in s.note_favorites if notedetails == item[0].rsplit("-", 1)[0]]
+            if notfavoritenote:
+                channel = [item[1] for item in s.cut_directions if cutdirection[0] == item[0]]
+                return(notfavoritenote[0], channel[0])
+                #print(str(notfavoritenote[0]) + "channel " + str(channel[0]) + " (not favorite")
+        else:
+            return(favoritenote[0], 9)
+
+    def JSONNoteToObstacle(self, inputobstacle):
+        type = [item[0] for item in s.obstacle_types if inputobstacle["_type"] == item[1]]
+        line = [item[0] for item in s.obstacle_line_indices if inputobstacle["_lineIndex"] == item[1]]
+        duration = [item[0] for item in s.obstacle_durations if inputobstacle["_duration"] == item[1]] #not implemented in MIDI yet
+        width = [item[0] for item in s.obstacle_widths if inputobstacle["_width"] == item[1]]          #not implemented in MIDI yet
+
+        notedetails =  type[0] + "-" + line[0] + "-" + duration[0] + "-" + width[0]
+        print(notedetails)
+        favoriteobstacle = [item[1] for item in s.obstacle_tuple if notedetails.rsplit("-", 2)[0] == item[0]]
+        return(favoriteobstacle[0])
+
+
+        
     def NoteToJSON(self, inputnote, time, mine):
         outputnote = copy.deepcopy(s.note)
         inputnote = inputnote.split("-")

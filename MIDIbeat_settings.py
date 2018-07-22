@@ -7,33 +7,32 @@ ext = ".wav"
 
 note_favorites = [
     #config favorites here: default C7-B7 (96-107) for blue and C8-B8 (108-119) for red)
-    ("note_red-line_midleft-layer_bot-cut_down", 108),
+ ("note_red-line_midleft-layer_bot-cut_down", 108),
     ("note_red-line_left-layer_bot-cut_down", 109),
-    ("note_red-line_midleft-layer_bot-cut_up", 110),
-    ("note_red-line_left-layer_bot-cut_up", 111),
+    ("note_red-line_midright-layer_bot-cut_any", 110),
+    ("note_red-line_right-layer_bot-cut_right", 111),
     ("note_red-line_midleft-layer_mid-cut_left", 112),
     ("note_red-line_left-layer_mid-cut_left", 113),
-    ("note_red-line_right-layer_bot-cut_right", 114),
+    ("note_red-line_midright-layer_mid-cut_any", 114),
     ("note_red-line_right-layer_mid-cut_right", 115),
     ("note_red-line_midleft-layer_top-cut_any", 116),
     ("note_red-line_left-layer_top-cut_any", 117),
-    ("note_red-line_midright-layer_mid-cut_any", 118),
-    ("note_red-line_midright-layer_bot-cut_any", 119),
+    ("note_red-line_midright-layer_top-cut_any", 118),
+    ("note_red-line_right-layer_top-cut_any", 119),
     
     ("note_blue-line_midright-layer_bot-cut_down", 96),
     ("note_blue-line_right-layer_bot-cut_down", 97),
-    ("note_blue-line_midright-layer_bot-cut_up", 98),
-    ("note_blue-line_right-layer_bot-cut_up", 99),
+    ("note_blue-line_left-layer_bot-cut_left", 98),
+    ("note_blue-line_midleft-layer_bot-cut_any", 99),
     ("note_blue-line_midright-layer_mid-cut_right", 100),
     ("note_blue-line_right-layer_mid-cut_right", 101),
-    ("note_blue-line_left-layer_bot-cut_left", 102),
+    ("note_blue-line_midleft-layer_mid-cut_any", 102),
     ("note_blue-line_left-layer_mid-cut_left", 103),
     ("note_blue-line_midright-layer_top-cut_any", 104),
     ("note_blue-line_right-layer_top-cut_any", 105),
-    ("note_blue-line_midleft-layer_mid-cut_any", 106),
-    ("note_blue-line_midleft-layer_bot-cut_any", 107)
+    ("note_blue-line_midleft-layer_top-cut_any", 106),
+    ("note_blue-line_left-layer_top-cut_any", 107)
 ]
-
 event_favorites = [
     #config favorites here: default C7-B7 (96-107) for blue and C8-B8 (108-119) for red)
     ("laser_laserleft-red_redon", 108),
@@ -71,7 +70,7 @@ obstacle_tuple = [
     ("obstacle_wall-obstacleline_midright", 90),
     ("obstacle_wall-obstacleline_midleft", 91),
     ("obstacle_wall-obstacleline_left", 92),
-    ("obstacle_ceiling-none_top", 93)
+    ("obstacle_ceiling-obstacleline_left", 93)
 ]
 
 input_tuple = [ #configure notes here
