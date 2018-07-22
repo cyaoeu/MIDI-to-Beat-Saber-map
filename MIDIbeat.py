@@ -66,7 +66,7 @@ class MIDIbeat:
     def CreateJSONFromMIDI(self):
         beatmap = copy.deepcopy(s.map)
         currenttick = 0
-        mid = mido.MidiFile(s.path + "beatsaber.mid")
+        mid = mido.MidiFile(s.path + s.midifile)
         ticks_per_beat = mid.ticks_per_beat
         for i, track in enumerate(mid.tracks):
             print('Track {}: {}'.format(i, track.name))
@@ -217,6 +217,50 @@ class MIDIbeat:
 
         with open(s.outputpath + s.songname + "\\" + 'Expert.json', 'w') as outfile:
             json.dump(beatmap, outfile, indent=4)
+
+        #InfoJSON values
+        songname = s.songname
+        subname = "subname"
+        authorname = "authorname"
+        environmentname = "BigMirrorEnvironment" #find rest of names
+        coverimagepath = "cover.png"
+        previewstart = 0
+        previewduration = 12
+        difficulty = "Expert"
+        difficultyrank = 4
+        audiopath = "beatsaber.ogg"
+        jsonpath = "Export.json"
+        infopath = "info.json"
+        offset = 0
+        oldoffset = 0
+        difficultylevels = [
+            # {"difficulty":"Expert","difficultyRank":4,"audioPath":"beatsaber.ogg","jsonPath":"Expert.json","offset":0,"oldOffset":0}]
+            {"difficulty" : difficulty,
+            "difficultyRank" : difficultyrank,
+            "audioPath" : audiopath,
+            "jsonPath" : jsonpath,
+            "offset" : offset,
+            "oldoffset" : 0 }
+        ]
+        infojson = copy.deepcopy(s.info)
+
+        info = self.CreateInfoJSON(infojson, songname, subname, authorname, bpm, previewstart, previewduration, coverimagepath, environmentname, difficultylevels)
+
+        with open(s.outputpath + s.songname + "\\" + infopath, "w") as infofile:
+            json.dump(info, infofile, indent=4)
+
+    def CreateInfoJSON(self, info, songname, songsubname, authorname, bpm, previewstart, previewduration, coverimagepath, environmentname, difficultylevels):
+        info["songName"] = songname
+        info["songSubName"] = songsubname
+        info["authorName"] = authorname
+        info["beatsPerMinute"] = bpm
+        info["previewStartTime"] = previewstart
+        info["previewDuration"] = previewduration
+        info["coverImagePath"] = coverimagepath 
+        info["environmentName"] = environmentname
+        info["difficultyLevels"] = difficultylevels
+        return info
+        #{"difficulty":"Expert","difficultyRank":4,"audioPath":"beatsaber.ogg","jsonPath":"Expert.json","offset":0,"oldOffset":0}]
             
     def CreateMIDIFromJSON(self, event):
         with open(s.path + "OST\\SongLevelData_Breezer_Expert-resources.assets-231-MonoBehaviour.json") as f:

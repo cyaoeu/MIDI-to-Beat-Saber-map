@@ -2,7 +2,8 @@
 
 path = "C:\\beatsaber\\"
 outputpath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\CustomSongs\\"
-songname = "Forbidden Fruit"
+midifile = "MIDIbeat.mid"
+songname = "Breezy2"
 ext = ".wav"
 
 note_favorites = [
@@ -268,6 +269,20 @@ map = {
     "_notes": [],
     "_obstacles": []
 }
+
+info = {
+    "songName":"",
+    "songSubName":"",
+    "authorName":"",
+    "beatsPerMinute": 0,
+    "previewStartTime":12,
+    "previewDuration":10,
+    "coverImagePath":"cover.png",
+    "environmentName":"BigMirrorEnvironment",
+    "difficultyLevels":[
+        {"difficulty":"Expert","difficultyRank":4,"audioPath":"beatsaber.ogg","jsonPath":"Expert.json","offset":0,"oldOffset":0}]
+}
+
 
 note = {
     "_time": 0,
