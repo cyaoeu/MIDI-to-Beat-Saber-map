@@ -266,8 +266,7 @@ class MIDIbeat:
             multiple_notes = False
             
             for note in notes:
-                print(note["_cutDirection"])
-                print("note")
+                #print(note["_cutDirection"])
                 notetimeinticks = int(mido.second2tick(note["_time"] / bps, 480, tempo))
                 note_number, channel = self.JSONNoteToSaberSlash(note)
                 notes_track.append(mido.Message('note_on', note=note_number, channel=channel, velocity=64, time=notetimeinticks-prevtime))              
@@ -288,6 +287,21 @@ class MIDIbeat:
                 prevtime = notetimeinticks 
 
             mid.tracks.append(mido.merge_tracks(mid.tracks))
+            events_track = mido.MidiTrack()
+            mid.tracks.append(events_track)
+
+            last_event = 0
+            prevtime = 0
+            for event in events:
+                eventtimeinticks = int(mido.second2tick(event["_time"] / bps, 480, tempo))
+                event_number, channel = self.JSONNoteToEvent(event)
+                events_track.append(mido.Message('note_on', note=event_number, channel=channel, velocity=64, time=eventtimeinticks-prevtime))              
+                events_track.append(mido.Message('note_off', note=last_event, channel=last_channel, velocity=0, time=0))         
+                last_event = event_number
+                last_channel = channel
+                prevtime = eventtimeinticks
+
+
             mid.tracks.remove(notes_track)
             mid.tracks.remove(obstacles_track)
             mid.save(s.path + 'new_song.mid')
@@ -326,6 +340,31 @@ class MIDIbeat:
         print(notedetails)
         favoriteobstacle = [item[1] for item in s.obstacle_tuple if notedetails.rsplit("-", 2)[0] == item[0]]
         return(favoriteobstacle[0])
+
+    def JSONNoteToEvent(self, inputevent):
+
+        type = [item[0] for item in s.lighting_types if inputevent["_type"] == item[1]]
+        if type[0] != ("speed_speedlaserleft" or "speed_speedlaserright"): 
+            value = [item[0] for item in s.lighting_lightvalues if inputevent["_value"] == item[1]]
+        else:
+            value = [item[0] for item in s.lighting_rotationvalues if inputevent["_value"] == item[1]]
+
+        notedetails =  type[0] + "-" + value[0]
+        print(notedetails)
+        favoritenote = [item[1] for item in s.event_favorites if notedetails == item[0]]
+        if not favoritenote:
+            notedetails =  type[0]
+            
+            notfavoritenote = [item[1] for item in s.event_favorites if notedetails == item[0].rsplit("-", 1)[0]]
+            if notfavoritenote:
+                if type[0] == ("speed_speedlaserleft" or "speed_speedlaserright"):
+                    channel = [item[1] for item in s.lighting_rotationvalues if value[0] == item[0]]
+                    return(notfavoritenote[0], channel[0])
+                else:
+                    channel = [item[1] for item in s.lighting_lightvalues if value[0] == item[0]]
+                    return(notfavoritenote[0], channel[0])
+        else:
+            return(favoritenote[0], 9)
 
 
         
