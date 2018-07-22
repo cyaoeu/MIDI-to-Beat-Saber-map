@@ -262,7 +262,7 @@ class MIDIbeat:
                 notetimeinticks = int(mido.second2tick(note["_time"] / bps, 480, tempo))
                 note_number, channel = self.JSONNoteToSaberSlash(note)
                 notes_track.append(mido.Message('note_on', note=note_number, channel=channel, velocity=64, time=notetimeinticks-prevtime))              
-                notes_track.append(mido.Message('note_off', note=last_note, channel=last_channel, time=0))         
+                notes_track.append(mido.Message('note_off', note=last_note, channel=last_channel, velocity=0, time=0))         
                 last_note = note_number
                 last_channel = channel
                 prevtime = notetimeinticks
@@ -272,7 +272,7 @@ class MIDIbeat:
                 notetimeinticks = int(mido.second2tick(obstacle["_time"] / bps, 480, tempo))
                 obstacle_note_number = self.JSONNoteToObstacle(obstacle)
                 notes_track.append(mido.Message('note_on', note=obstacle_note_number, velocity=64, time=notetimeinticks-prevtime))              
-                notes_track.append(mido.Message('note_off', note=last_note, time=0))         
+                notes_track.append(mido.Message('note_off', note=last_note, velocity=0, time=0))         
                 last_note = obstacle_note_number
                 prevtime = notetimeinticks
 

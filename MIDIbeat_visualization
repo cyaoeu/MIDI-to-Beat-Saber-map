@@ -421,7 +421,7 @@ while (n.notein()) (
                    note[i][4] = blue_y_note[u];
                    note[i][5] = blue_cut_direction[u];
                    
-                   note[i][2] == 0 ? note[i][0] = -1;
+                   note[i][2] <= 0 ? note[i][0] = -1;
                    
         
                  );
@@ -437,7 +437,7 @@ while (n.notein()) (
                 note[i][4] = red_y_note[v];
                 note[i][5] = red_cut_direction[v];
                 
-                note[i][2] == 0 ? note[i][0] = -1;
+                note[i][2] <= 0 ? note[i][0] = -1;
 
               
          
@@ -577,7 +577,7 @@ msg2 != 0 ? (
           );
     flash == 1 ? (
       
-      loop(12,
+      loop(10,
         gfx_muladdrect(gfx_note[q2][3], 70 + gfx_note[q2][4], 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
       );
       
@@ -605,7 +605,7 @@ msg2 != 0 ? (
         note("red", gfx_note[q3], gfx_note[q3][1]);
         );  
         flash == 1 ? (
-    loop(12,
+    loop(10,
       gfx_muladdrect(gfx_note[q3][3], 70 + gfx_note[q3][4], 75,75, gfx_r*=0.999, gfx_g*=0.999, gfx_b*=0.999, 1, 0, 0, 0); 
     );
     
