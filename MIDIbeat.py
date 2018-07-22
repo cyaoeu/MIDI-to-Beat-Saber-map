@@ -234,10 +234,14 @@ class MIDIbeat:
             bpm = data["_beatsPerMinute"]
             tempo = mido.bpm2tempo(bpm) 
             mid = mido.MidiFile(type=1, ticks_per_beat=480)
+            midi_track = mido.MidiTrack()
+            mid.tracks.append(midi_track)
             notes_track = mido.MidiTrack()
             mid.tracks.append(notes_track)
-            notes_track.append(mido.MetaMessage('time_signature', numerator=4, denominator=4, clocks_per_click=24, notated_32nd_notes_per_beat=8, time=0))
-            notes_track.append(mido.MetaMessage('set_tempo', tempo=tempo))
+            obstacles_track = mido.MidiTrack()
+            mid.tracks.append(obstacles_track)
+            midi_track.append(mido.MetaMessage('time_signature', numerator=4, denominator=4, clocks_per_click=24, notated_32nd_notes_per_beat=8, time=0))
+            midi_track.append(mido.MetaMessage('set_tempo', tempo=tempo))
             currenttick = 0
             notes = []
             obstacles = []
@@ -247,10 +251,10 @@ class MIDIbeat:
                 notes.append(note)
                 #print(note)
             for obstacle in data["_obstacles"]:
-                notes.append(obstacle)
+                obstacles.append(obstacle)
             for event in data["_events"]:
                 events.append(event)
-            notes = sorted(notes, key=itemgetter("_time")) 
+            
 
             prevtime = 0
             noteofftime = 0
@@ -262,25 +266,30 @@ class MIDIbeat:
             multiple_notes = False
             
             for note in notes:
-                try:
-                    print(note["_cutDirection"])
-                    print("note")
-                    notetimeinticks = int(mido.second2tick(note["_time"] / bps, 480, tempo))
-                    note_number, channel = self.JSONNoteToSaberSlash(note)
-                    notes_track.append(mido.Message('note_on', note=note_number, channel=channel, velocity=64, time=notetimeinticks-prevtime))              
-                    notes_track.append(mido.Message('note_off', note=last_note, channel=last_channel, velocity=0, time=0))         
-                    last_note = note_number
-                    last_channel = channel
-                    prevtime = notetimeinticks
+                print(note["_cutDirection"])
+                print("note")
+                notetimeinticks = int(mido.second2tick(note["_time"] / bps, 480, tempo))
+                note_number, channel = self.JSONNoteToSaberSlash(note)
+                notes_track.append(mido.Message('note_on', note=note_number, channel=channel, velocity=64, time=notetimeinticks-prevtime))              
+                notes_track.append(mido.Message('note_off', note=last_note, channel=last_channel, velocity=0, time=0))         
+                last_note = note_number
+                last_channel = channel
+                prevtime = notetimeinticks
                 
-                except:
-                    notetimeinticks = int(mido.second2tick(note["_time"] / bps, 480, tempo))
-                    obstacle_note_number = self.JSONNoteToObstacle(note)
-                    notes_track.append(mido.Message('note_on', note=obstacle_note_number, velocity=64, time=notetimeinticks-prevtime))              
-                    notes_track.append(mido.Message('note_off', note=last_obstacle, velocity=0, time=0))         
-                    last_obstacle = obstacle_note_number
-                    prevtime = notetimeinticks
+            prevtime = 0
+            duration = 0
+            for obstacle in obstacles:
+                notetimeinticks = int(mido.second2tick(obstacle["_time"] / bps, 480, tempo))
+                obstacle_note_number = self.JSONNoteToObstacle(obstacle)
+                obstacles_track.append(mido.Message('note_on', note=obstacle_note_number, velocity=64, time=notetimeinticks-prevtime-duration))              
+                duration = int(mido.second2tick(obstacle["_duration"] / bps, 480, tempo))
+                obstacles_track.append(mido.Message('note_off', note=obstacle_note_number, velocity=0, time=duration))         
+                last_obstacle = obstacle_note_number
+                prevtime = notetimeinticks 
 
+            mid.tracks.append(mido.merge_tracks(mid.tracks))
+            mid.tracks.remove(notes_track)
+            mid.tracks.remove(obstacles_track)
             mid.save(s.path + 'new_song.mid')
 
     def JSONNoteToSaberSlash(self, inputnote):
