@@ -9,6 +9,9 @@ import MIDIbeat_settings as s
 import tkinter as tk
 from operator import itemgetter
 
+#bugs:
+# obstacle width not possible
+
 class MIDIbeat:
     #UI code
     def __init__(self, master):
@@ -80,7 +83,8 @@ class MIDIbeat:
                             print(msg)
                             print("set BPM")
                             bpm = mido.tempo2bpm(msg.tempo)
-                            beatmap["_beatsPerMinute"] = bpm
+                            bpm = round(bpm)
+                            beatmap["_beatsPerMinute"] = round(bpm, 2)
                             tempo = msg.tempo
                     
                     if msg.type == "note_on" and msg.velocity != 0:
@@ -162,7 +166,7 @@ class MIDIbeat:
                         if msg.type == "set_tempo":
                             print(msg)
                             bpm = mido.tempo2bpm(msg.tempo)
-                            beatmap["_beatsPerMinute"] = bpm
+                            beatmap["_beatsPerMinute"] = round(bpm, 2)
                             tempo = msg.tempo
                     
                     if msg.type == "note_on" and msg.velocity != 0:
@@ -222,7 +226,7 @@ class MIDIbeat:
                             print(msg)
                             print("set BPM")
                             bpm = mido.tempo2bpm(msg.tempo)
-                            beatmap["_beatsPerMinute"] = bpm
+                            beatmap["_beatsPerMinute"] = round(bpm, 2)
                             tempo = msg.tempo
 
         with open(s.outputpath + s.songname + "\\" + 'Expert.json', 'w') as outfile:
@@ -282,7 +286,7 @@ class MIDIbeat:
         lineindex = [item[1] for item in s.line_indices if inputnote[1] == item[0]]
         linelayer = [item[1] for item in s.line_layers if inputnote[2] == item[0]]
         cutdirection = [item[1] for item in s.cut_directions if inputnote[3] == item[0]]
-        outputnote["_time"] = time
+        outputnote["_time"] = round(time, 2)
         outputnote["_lineIndex"] = lineindex[0]
         outputnote["_lineLayer"] = linelayer[0]
         if mine:
@@ -298,10 +302,11 @@ class MIDIbeat:
         obstacletype = [item[1] for item in s.obstacle_types if inputobstacle[0] == item[0]]
         if obstacletype[0] == 0:
             obstaclelineindex = [item[1] for item in s.obstacle_line_indices if inputobstacle[1] == item[0]]
+            outputobstacle["_lineIndex"] = obstaclelineindex[0]
         else:
-            obstaclelineindex = "0"
-        outputobstacle["_time"] = time
-        outputobstacle["_lineIndex"] = obstaclelineindex[0]
+            obstaclelineindex = 0
+            outputobstacle["_lineIndex"] = 0
+        outputobstacle["_time"] = round(time, 2)
         outputobstacle["_type"] = obstacletype[0]
         outputobstacle["_duration"] = duration
         outputobstacle["_width"] = 1 #default to 1 for now
@@ -315,7 +320,7 @@ class MIDIbeat:
             eventvalue = [item[1] for item in s.lighting_rotationvalues if inputevent[1] == item[0]]
         else:    
             eventvalue = [item[1] for item in s.lighting_lightvalues if inputevent[1] == item[0]]
-        outputevent["_time"] = time
+        outputevent["_time"] = round(time, 2)
         outputevent["_type"] = eventtype[0]
         outputevent["_value"] = eventvalue[0]
         return(outputevent)

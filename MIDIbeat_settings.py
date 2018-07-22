@@ -261,7 +261,7 @@ lighting_rotationvalues = [
 map = {
     "_version": "1.5.0",
     "_beatsPerMinute": 0,
-    "_beatsPerBar": 8,
+    "_beatsPerBar": 16,
     "_noteJumpSpeed": 10,
     "_shuffle": 0,
     "_shufflePeriod": 0.5,
