@@ -66,6 +66,8 @@ class MIDIbeat:
     def CreateJSONFromMIDI(self):
         beatmap = copy.deepcopy(s.map)
         currenttick = 0
+        currentobstaclebeat = 0
+        obstacleduration = 0
         mid = mido.MidiFile(s.path + s.midifile)
         ticks_per_beat = mid.ticks_per_beat
         for i, track in enumerate(mid.tracks):
@@ -88,6 +90,7 @@ class MIDIbeat:
                         channel = msg.channel
                         if note in range(89, 94): #if note is obstacle
                             obstacle_ontime = currentbeat
+                            saved_obstacle = note
                             midinote = [item[0] for item in s.obstacle_tuple if msg.note == item[1]]
                             toJSONobstacle = midinote[0]
                             print("NOTEON: " + "#" + str(note) + " (" + midinote[0] + ")") #debug
@@ -109,7 +112,7 @@ class MIDIbeat:
                                                        
                             else:
                                 midichannel = [item[0] for item in s.cut_directions if msg.channel == item[1]]
-                                toJSONnote = midinote[0] + "-" + midichannel[0]
+                                toJSONnote = midinote[0].rsplit("-", 1)[0] + "-" + midichannel[0]
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
                                 toJSONtime = currentbeat                          
                                 beatmap["_notes"].append(self.NoteToJSON(toJSONnote, toJSONtime, False))  
@@ -129,10 +132,11 @@ class MIDIbeat:
                         currentbeat = currenttick / ticks_per_beat
                         note = msg.note
                         if note in range(89, 94):
-                            obstacleduration = currentbeat - obstacle_ontime
-                            beatmap["_obstacles"].append(self.ObstacleToJSON(toJSONobstacle, obstacle_ontime, obstacleduration))
-                            midinote = [item[0] for item in s.obstacle_tuple if msg.note == item[1]]
-                            print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
+                            if note == saved_obstacle:
+                                obstacleduration = currentbeat - obstacle_ontime
+                                beatmap["_obstacles"].append(self.ObstacleToJSON(toJSONobstacle, obstacle_ontime, obstacleduration))
+                                midinote = [item[0] for item in s.obstacle_tuple if msg.note == item[1]]
+                                print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                         else:
                             if msg.channel == 9:
                                 midinote = [item[0] for item in s.note_favorites if msg.note == item[1]]
@@ -140,9 +144,13 @@ class MIDIbeat:
                             elif msg.channel == 10:
                                 print("NOTEOFF: " + "#" + str(note) + " ch:" + " (MINE)") #debug  
                             else:
-                                midinote = [item[0] for item in s.input_tuple if msg.note == item[1]]
+                                midinote = [item[0] for item in s.note_favorites if msg.note == item[1]]
                                 midichannel = [item[0] for item in s.cut_directions if msg.channel == item[1]]
-                                print("NOTEOFF: " + "#" + str(note) + " ch:" + str(midichannel) + " (" + midinote[0] + ")") #debug                   
+                                print("NOTEOFF: " + "#" + str(note) + " ch: " + midichannel[0] + " (" + midinote[0] + ")") #debug   
+
+                    else:
+                        print("WTF")
+                        print(msg)                
 
             elif track.name == "Events":
                 print("events here")
@@ -171,8 +179,8 @@ class MIDIbeat:
                                 print("NOTEON: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + ")") #debug
                                 beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                             else:
-                                print(midinote[0].split("-")[0])
-                                if midinote[0].split("-")[0] in ["speed_speedlaserleft", "speed_speedlaserright"]:
+                                midinote[0] = midinote[0].split("-")[0]
+                                if midinote[0] in ["speed_speedlaserleft", "speed_speedlaserright"]:
                                     midichannel = [item[0] for item in s.lighting_rotationvalues if msg.channel == item[1]]
                                 else:
                                     midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
@@ -181,10 +189,10 @@ class MIDIbeat:
                                 beatmap["_events"].append(self.EventToJSON(toJSONevent, toJSONtime))
                       
                     elif msg.type == "note_off" or msg.type == "note_on" and msg.velocity == 0:
+                        note = msg.note
                         if note in range(96, 120):
                             currenttick += msg.time
                             currentbeat = currenttick / ticks_per_beat
-                            note = msg.note
                             midinote = [item[0] for item in s.event_favorites if msg.note == item[1]]
                             if msg.channel == 9:
                                 toJSONnote = midinote[0]
@@ -196,6 +204,8 @@ class MIDIbeat:
                                     midichannel = [item[0] for item in s.lighting_lightvalues if msg.channel == item[1]]
                                 toJSONnote = midinote[0] + "-" + midichannel[0]
                                 print("NOTEOFF: " + "#" + str(note) + " ch:" + str(channel) + " (" + midinote[0] + midichannel[0] + ")") #debug
+                        elif note == 0:
+                            print("note 0 what")
                         else:
                             midinote = [item[0] for item in s.lighting_tuple if msg.note == item[1]]
                             if midinote[0].split("-")[0] in ["speed_speedlaserleft", "speed_speedlaserright"]:
@@ -227,9 +237,9 @@ class MIDIbeat:
         previewstart = 0
         previewduration = 12
         difficulty = "Expert"
-        difficultyrank = 4
+        difficultyrank = "4"
         audiopath = "beatsaber.ogg"
-        jsonpath = "Export.json"
+        jsonpath = "Expert.json"
         infopath = "info.json"
         offset = 0
         oldoffset = 0
@@ -247,7 +257,7 @@ class MIDIbeat:
         info = self.CreateInfoJSON(infojson, songname, subname, authorname, bpm, previewstart, previewduration, coverimagepath, environmentname, difficultylevels)
 
         with open(s.outputpath + s.songname + "\\" + infopath, "w") as infofile:
-            json.dump(info, infofile, indent=4)
+            json.dump(info, infofile)
 
     def CreateInfoJSON(self, info, songname, songsubname, authorname, bpm, previewstart, previewduration, coverimagepath, environmentname, difficultylevels):
         info["songName"] = songname
@@ -261,7 +271,55 @@ class MIDIbeat:
         info["difficultyLevels"] = difficultylevels
         return info
         #{"difficulty":"Expert","difficultyRank":4,"audioPath":"beatsaber.ogg","jsonPath":"Expert.json","offset":0,"oldOffset":0}]
-            
+        
+    def NoteToJSON(self, inputnote, time, mine):
+        outputnote = copy.deepcopy(s.note)
+        inputnote = inputnote.split("-")
+        if mine:
+            notetype = 3
+        else:
+            notetype = [item[1] for item in s.note_types if inputnote[0] == item[0]]
+        lineindex = [item[1] for item in s.line_indices if inputnote[1] == item[0]]
+        linelayer = [item[1] for item in s.line_layers if inputnote[2] == item[0]]
+        cutdirection = [item[1] for item in s.cut_directions if inputnote[3] == item[0]]
+        outputnote["_time"] = time
+        outputnote["_lineIndex"] = lineindex[0]
+        outputnote["_lineLayer"] = linelayer[0]
+        if mine:
+            outputnote["_type"] = notetype
+        else:
+            outputnote["_type"] = notetype[0]
+        outputnote["_cutDirection"] = cutdirection[0]
+        return(outputnote)
+
+    def ObstacleToJSON(self, inputobstacle, time, duration):
+        outputobstacle = copy.deepcopy(s.obstacle)
+        inputobstacle = inputobstacle.split("-")
+        obstacletype = [item[1] for item in s.obstacle_types if inputobstacle[0] == item[0]]
+        if obstacletype[0] == 0:
+            obstaclelineindex = [item[1] for item in s.obstacle_line_indices if inputobstacle[1] == item[0]]
+        else:
+            obstaclelineindex = "0"
+        outputobstacle["_time"] = time
+        outputobstacle["_lineIndex"] = obstaclelineindex[0]
+        outputobstacle["_type"] = obstacletype[0]
+        outputobstacle["_duration"] = duration
+        outputobstacle["_width"] = 1 #default to 1 for now
+        return(outputobstacle)
+
+    def EventToJSON(self, inputevent, time):
+        outputevent = copy.deepcopy(s.event)
+        inputevent = inputevent.split("-")
+        eventtype = [item[1] for item in s.lighting_types if inputevent[0] == item[0]]
+        if eventtype[0] >= 12:
+            eventvalue = [item[1] for item in s.lighting_rotationvalues if inputevent[1] == item[0]]
+        else:    
+            eventvalue = [item[1] for item in s.lighting_lightvalues if inputevent[1] == item[0]]
+        outputevent["_time"] = time
+        outputevent["_type"] = eventtype[0]
+        outputevent["_value"] = eventvalue[0]
+        return(outputevent)
+
     def CreateMIDIFromJSON(self, event):
         with open(s.path + "OST\\SongLevelData_Breezer_Expert-resources.assets-231-MonoBehaviour.json") as f:
             data = json.load(f)
@@ -401,51 +459,6 @@ class MIDIbeat:
             return(favoritenote[0], 9)
 
 
-        
-    def NoteToJSON(self, inputnote, time, mine):
-        outputnote = copy.deepcopy(s.note)
-        inputnote = inputnote.split("-")
-        if mine:
-            notetype = "note_mine"
-        else:
-            notetype = [item[1] for item in s.note_types if inputnote[0] == item[0]]
-        lineindex = [item[1] for item in s.line_indices if inputnote[1] == item[0]]
-        linelayer = [item[1] for item in s.line_layers if inputnote[2] == item[0]]
-        cutdirection = [item[1] for item in s.cut_directions if inputnote[3] == item[0]]
-        outputnote["_time"] = str(time)
-        outputnote["_lineIndex"] = str(lineindex[0])
-        outputnote["_lineLayer"] = str(linelayer[0])
-        outputnote["_type"] = str(notetype[0])
-        outputnote["_cutDirection"] = str(cutdirection[0])
-        return(outputnote)
-
-    def ObstacleToJSON(self, inputobstacle, time, duration):
-        outputobstacle = copy.deepcopy(s.obstacle)
-        inputobstacle = inputobstacle.split("-")
-        obstacletype = [item[1] for item in s.obstacle_types if inputobstacle[0] == item[0]]
-        if obstacletype == "obstacle_wall":
-            obstaclelineindex = [item[1] for item in s.obstacle_line_indices if inputobstacle[1] == item[0]]
-        else:
-            obstaclelineindex = "0"
-        outputobstacle["_time"] = str(time)
-        outputobstacle["_lineIndex"] = str(obstaclelineindex[0])
-        outputobstacle["_type"] = str(obstacletype[0])
-        outputobstacle["_duration"] = duration
-        outputobstacle["_width"] = 1 #default to 1 for now
-        return(outputobstacle)
-
-    def EventToJSON(self, inputevent, time):
-        outputevent = copy.deepcopy(s.event)
-        inputevent = inputevent.split("-")
-        eventtype = [item[1] for item in s.lighting_types if inputevent[0] == item[0]]
-        if eventtype[0] >= 12:
-            eventvalue = [item[1] for item in s.lighting_rotationvalues if inputevent[1] == item[0]]
-        else:    
-            eventvalue = [item[1] for item in s.lighting_lightvalues if inputevent[1] == item[0]]
-        outputevent["_time"] = time
-        outputevent["_type"] = eventtype[0]
-        outputevent["_value"] = eventvalue[0]
-        return(outputevent)
 
 #instance.RenameReaperOutput()
 #utility_functions.CreateReaperNotenamesFile() # uncomment the start of this line to generate a notenames file for Reaper

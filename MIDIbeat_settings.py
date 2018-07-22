@@ -3,7 +3,7 @@
 path = "C:\\beatsaber\\"
 outputpath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Beat Saber\\CustomSongs\\"
 midifile = "MIDIbeat.mid"
-songname = "Breezy2"
+songname = "Breezy1"
 ext = ".wav"
 
 note_favorites = [
